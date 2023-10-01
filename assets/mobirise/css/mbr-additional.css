@@ -7516,6 +7516,112 @@ a {
 .cid-tQT0R9NWa5 .mbr-description {
   color: #ffffff;
 }
+.cid-tRsF1YxSqk {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  background-color: #232323;
+}
+.cid-tRsF1YxSqk .mbr-fallback-image.disabled {
+  display: none;
+}
+.cid-tRsF1YxSqk .mbr-fallback-image {
+  display: block;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+@media (max-width: 991px) {
+  .cid-tRsF1YxSqk .image-wrapper {
+    margin-bottom: 1rem;
+  }
+}
+.cid-tRsF1YxSqk img {
+  width: 100%;
+}
+@media (min-width: 992px) {
+  .cid-tRsF1YxSqk .text-wrapper {
+    padding: 2rem;
+  }
+}
+.cid-tRsF1YxSqk .mbr-section-title {
+  color: #ffffff;
+}
+.cid-tRsF1YxSqk .mbr-text {
+  color: #ffffff;
+}
+.cid-tRsChmeEyz {
+  padding-top: 4rem;
+  padding-bottom: 3rem;
+  background-color: #232323;
+}
+.cid-tRsChmeEyz .mbr-fallback-image.disabled {
+  display: none;
+}
+.cid-tRsChmeEyz .mbr-fallback-image {
+  display: block;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+@media (max-width: 991px) {
+  .cid-tRsChmeEyz .image-wrapper {
+    margin-bottom: 1rem;
+  }
+}
+.cid-tRsChmeEyz .row {
+  flex-direction: row-reverse;
+}
+.cid-tRsChmeEyz img {
+  width: 100%;
+}
+@media (min-width: 992px) {
+  .cid-tRsChmeEyz .text-wrapper {
+    padding: 2rem;
+  }
+}
+.cid-tRsChmeEyz .mbr-section-title {
+  color: #ffffff;
+}
+.cid-tRsChmeEyz .mbr-text {
+  color: #ffffff;
+}
+.cid-tRsChmeEyz .mbr-description {
+  color: #ffffff;
+}
+.cid-tRsHH2ZPBp {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  background-color: #232323;
+}
+.cid-tRsHH2ZPBp .mbr-fallback-image.disabled {
+  display: none;
+}
+.cid-tRsHH2ZPBp .mbr-fallback-image {
+  display: block;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+@media (max-width: 991px) {
+  .cid-tRsHH2ZPBp .image-wrapper {
+    margin-bottom: 1rem;
+  }
+}
+.cid-tRsHH2ZPBp .row {
+  flex-direction: row-reverse;
+}
+.cid-tRsHH2ZPBp img {
+  width: 100%;
+}
 .cid-tQTbahrzJf .navbar-dropdown {
   position: relative !important;
 }
