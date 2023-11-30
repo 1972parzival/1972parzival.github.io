@@ -8752,7 +8752,9 @@ a {
   }
 }
 .cid-tX3LjOTN2P {
-  background-image: url("../../../assets/images/img-6791-5184x3456.jpg");
+  padding-top: 10rem;
+  padding-bottom: 0rem;
+  background-color: #232323;
 }
 .cid-tX3LjOTN2P .mbr-fallback-image.disabled {
   display: none;
@@ -8780,7 +8782,7 @@ a {
   background-color: #232323;
 }
 .cid-tX3Qwea3LY blockquote {
-  border-color: #6592e6;
+  border-color: #e43f3f;
   border-radius: 4px;
   background-color: #353535;
 }
