@@ -31237,3 +31237,128 @@ a {
 .cid-ugzxtKqIoK .mbr-description {
   color: #ffffff;
 }
+.cid-ugDl3DO7F8 {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: #232323;
+}
+.cid-ugDl3DO7F8 blockquote {
+  border-color: #6592e6;
+  border-radius: 4px;
+  background-color: #353535;
+}
+.cid-ugDl3DO7F8 .mbr-section-title {
+  color: #ffffff;
+}
+.cid-ugDl3DO7F8 .mbr-text {
+  color: #ffffff;
+}
+.cid-ugDktvRoO1 {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  background-color: #232323;
+}
+.cid-ugDktvRoO1 .mbr-fallback-image.disabled {
+  display: none;
+}
+.cid-ugDktvRoO1 .mbr-fallback-image {
+  display: block;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+@media (max-width: 991px) {
+  .cid-ugDktvRoO1 .image-wrapper {
+    margin-bottom: 1rem;
+  }
+}
+.cid-ugDktvRoO1 .row {
+  flex-direction: row-reverse;
+}
+.cid-ugDktvRoO1 img {
+  width: 100%;
+}
+@media (min-width: 992px) {
+  .cid-ugDktvRoO1 .text-wrapper {
+    padding: 2rem;
+  }
+}
+.cid-ugDktvRoO1 .mbr-description {
+  color: #ffffff;
+}
+.cid-ugDktvRoO1 .mbr-text {
+  color: #ffffff;
+}
+.cid-ugDktvRoO1 .mbr-section-title {
+  color: #ffffff;
+}
+.cid-ugDCSogcII {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  background-color: #232323;
+}
+.cid-ugDCSogcII .mbr-fallback-image.disabled {
+  display: none;
+}
+.cid-ugDCSogcII .mbr-fallback-image {
+  display: block;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+@media (max-width: 991px) {
+  .cid-ugDCSogcII .image-wrapper {
+    margin-bottom: 1rem;
+  }
+}
+.cid-ugDCSogcII .row {
+  flex-direction: row-reverse;
+}
+.cid-ugDCSogcII img {
+  width: 100%;
+}
+.cid-ugDCSogcII .mbr-description {
+  color: #ffffff;
+}
+.cid-ugDk6whmfe {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  background-color: #ffffff;
+}
+.cid-ugDk6whmfe .mbr-fallback-image.disabled {
+  display: none;
+}
+.cid-ugDk6whmfe .mbr-fallback-image {
+  display: block;
+  background-size: cover;
+  background-position: center center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+}
+@media (max-width: 991px) {
+  .cid-ugDk6whmfe .image-wrapper {
+    margin-bottom: 1rem;
+  }
+}
+.cid-ugDk6whmfe .row {
+  flex-direction: row-reverse;
+}
+.cid-ugDk6whmfe img {
+  width: 100%;
+}
+@media (min-width: 992px) {
+  .cid-ugDk6whmfe .text-wrapper {
+    padding: 2rem;
+  }
+}
+.cid-ugDk6whmfe .mbr-section-title {
+  color: #000000;
+}
