@@ -20,7 +20,7 @@ title: Mini Lightbox build
 ### LED light
 
 
-Use Mobirise website building software to create multiple sites for commercial and non-profit projects. CLIck on the image in this block to replace it. You can add a description below your image, or on the side. If you want to hide some of the text fields, open the Block parameters, and uncheck relevant options.
+Use Mobirise website building software to create multiple sites for commercial and non-profit projects. CLIck on the image in this block to replace it. You can add a description below your image, or on the side. If you want to hide some of the text fields, open the Block parameters, and uncheck relevant options
 
 
 ![Mobirise Website Builder](/assets/images/img-9972-1076x717.JPG)
