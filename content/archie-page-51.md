@@ -23,7 +23,7 @@ title: "opensauce 2024"
 Before we even arrived at the convention we were greeted by some amazing tech. On my way from the airport i bumped into several "self driving" cars. These Waymo cars operate as a taxi service across parts of san fran, and don't even have a person in the drivers seat! is this really safe? Probably not but to their credit everytime we saw one they operated perfectly even on some very difficult san fran crossings and hills. The sensors it uses to achieve this are lidar, cameras, radar.
 
 
-![Mobirise Website Builder](/assets/images/img-885.JPG)
+![Mobirise Website Builder](/assets/images/img-885.jpg)
 
 
 
@@ -34,7 +34,7 @@ Before we even arrived at the convention we were greeted by some amazing tech. O
 One really cool project i saw was this fully metal hand! Using a amazing complex gear system the hand is able to provide a amazing amount of dexterity and flexibility, without the user need to charge it and allows it to be used in everyday situations easily. The creator is working on trying to produce the product commercially, and has a few demo units on people with the impairment to gain feedback and improve it more over time.
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-26-at-9.59.36-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-26-at-9.59.36-pm.png)
 
 
 
@@ -52,19 +52,19 @@ One really cool project i saw was this fully metal hand! Using a amazing complex
 
 
 
-![Mobirise Website Builder](/assets/images/449065996-3584043038592740-8846669805914190362-n.JPG)
+![Mobirise Website Builder](/assets/images/449065996-3584043038592740-8846669805914190362-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/436342486-1225331465126281-769027316208974782-n.JPG)
+![Mobirise Website Builder](/assets/images/436342486-1225331465126281-769027316208974782-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/448671179-461487399823366-7909334023655359444-n.JPG)
+![Mobirise Website Builder](/assets/images/448671179-461487399823366-7909334023655359444-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/436381219-454158167477528-5502110526678095646-n.JPG)
+![Mobirise Website Builder](/assets/images/436381219-454158167477528-5502110526678095646-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-26-at-10.41.00-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-26-at-10.41.00-pm.png)
 
 
 
@@ -77,10 +77,10 @@ Met the man behind CommonWealth Robotics (Kevin Harrington) after i spotted hi
 
 
 
-![Mobirise Website Builder](/assets/images/448769759-480264927820097-7361101343796885758-n.JPG)
+![Mobirise Website Builder](/assets/images/448769759-480264927820097-7361101343796885758-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/436078411-1004322807994212-7723260980748088406-n.JPG)
+![Mobirise Website Builder](/assets/images/436078411-1004322807994212-7723260980748088406-n.jpg)
 
 
 
@@ -107,16 +107,16 @@ I got to see Micronics 3D who built and launched a fully working desktop SLS 3d 
 
 
 
-![Mobirise Website Builder](/assets/images/448812450-870957521747801-5895755135507325739-n.JPG)
+![Mobirise Website Builder](/assets/images/448812450-870957521747801-5895755135507325739-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/448804412-439570335671388-8534705456012104617-n.JPG)
+![Mobirise Website Builder](/assets/images/448804412-439570335671388-8534705456012104617-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/448736418-1705628910182457-2370370013032535588-n.JPG)
+![Mobirise Website Builder](/assets/images/448736418-1705628910182457-2370370013032535588-n.jpg)
 
 
-![Mobirise Website Builder](/assets/images/448883480-7897848863592245-6468372436681572977-n.JPG)
+![Mobirise Website Builder](/assets/images/448883480-7897848863592245-6468372436681572977-n.jpg)
 
 
 
@@ -135,7 +135,7 @@ Met the team behind the PillBot, a small pill sized device that contains a live 
 Got to meet the framework team, it was amazing to see a project with such a respectable goal and the team behind it in person. Framework is a laptop producer, their focus in on repairability, upgradability, and customization while still keeping it all in a modern day package. The team was great to talk to and i had a great discussion with them about how they have leveraged largely unpaid social media to grow their business and talked to them about how i found the project through both LTT and Louis Rossman. It was awesome and they seemed to really enjoy talking to me and even gave me a free hat and signed it for me.
 
 
-![Mobirise Website Builder](/assets/images/448393692-515800350877258-5975660906565665373-n.JPG)
+![Mobirise Website Builder](/assets/images/448393692-515800350877258-5975660906565665373-n.jpg)
 
 
 
@@ -146,7 +146,7 @@ Got to meet the framework team, it was amazing to see a project with such a resp
 I also got to meet the family run team behind Colorado PCB, they were a joy to talk to and i really liked talking to them about their process for making pcbs such as etching, plating and engraving. As well as discussing some thoughts i had about how i saw the industry shifting in the coming years which they seemed to firmly agree with. I really liked the family run feeling to the business and i have kept in contact with them over email. I hope one day i am able to visit their plant in Colorado for myself and see how it all really works.
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-26-at-11.41.20-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-26-at-11.41.20-pm.png)
 
 
 
@@ -179,6 +179,6 @@ My OpenSauce badge: Colin Furze, Styropyro, the framework team, colorado pcb, th
 Overall OpenSauce 2024 was amazing and really helped me, wether it be meeting amazing startup founders and talking to them about their journey, or seeing content creators i've watched and followed for years was amazing. When your doing projects, and certainly when doing it all by yourself it's easy to feel isolated but events like this really help show how many others like you are out there, all working on their own projects and building cool stuff. I hope i can afford to come back next year and do it all over again
 
 
-![Mobirise Website Builder](/assets/images/436646110-1194123668288084-3965146204422202912-n.JPG)
+![Mobirise Website Builder](/assets/images/436646110-1194123668288084-3965146204422202912-n.jpg)
 
 

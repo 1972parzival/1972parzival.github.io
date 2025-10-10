@@ -48,7 +48,7 @@ Side profile
 ![Mobirise Website Builder](/assets/images/img-101-1076x717.JPEG)
 
 
-![Mobirise Website Builder](/assets/images/img-100-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-100-1076x717.jpg)
 
 
 
@@ -58,6 +58,6 @@ Side profile
 
 
 
-![Mobirise Website Builder](/assets/images/img-102-1836x1224.JPG)
+![Mobirise Website Builder](/assets/images/img-102-1836x1224.jpg)
 
 

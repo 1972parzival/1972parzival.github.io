@@ -2,7 +2,7 @@
 categories: ["Engineering & Mechanical", "Experimental"]
 date: '2025-10-06'
 description: ""
-image: "/assets/images/img-807.JPG"
+image: "/assets/images/img-807.jpg"
 slug: archie-page-44
 tags: []
 title: "DIY Pressure Containers"
@@ -31,7 +31,7 @@ title: "DIY Pressure Containers"
 For this project I will converting two bottles into containers that can properly hold pressure (tested up to ~10 PSI). one smaller bottle will not have a exit valve, while the larger soda bottle will have a barbed exit connecter. To do this you I used: General:1 large soda bottle1 small water bottle1 air compressor (manual or automatic)1 3d printed barbed exit cap1 ball pump needlesealants: super glue (larger gaps)UV resin (smaller air tight gaps)safety equipment (if using UV resin): Nitrile gloves half-face respirator
 
 
-![Mobirise Website Builder](/assets/images/img-802.JPG)
+![Mobirise Website Builder](/assets/images/img-802.jpg)
 
 
 
@@ -42,7 +42,7 @@ For this project I will converting two bottles into containers that can properly
 To fill the larger gaps I used super glue. Using super glue helps to create a larger barrier and helps fill regions that UV resin couldn't cure, as it is not directly exposed to light. Just unscrew the cap and pour super glue onto the bottle's thread while rotating it, then quickly twist on the cap. After this wait at least 24 hours to ensure proper bonding has occurred
 
 
-![Mobirise Website Builder](/assets/images/img-803.JPG)
+![Mobirise Website Builder](/assets/images/img-803.jpg)
 
 
 
@@ -56,7 +56,7 @@ Photo of the resin used, paintbrush and box for the resin
 Then use UV resin to fill the smaller gaps. The UV resin I will be using is straight from my resin 3D printer, but most UV curable resins or general airtight sealants will do. To apply the resin I just used an old paint brush and slowly painted the edges of the thread of the cap while rotating the bottle
 
 
-![Mobirise Website Builder](/assets/images/img-805.JPG)
+![Mobirise Website Builder](/assets/images/img-805.jpg)
 
 
 
@@ -70,7 +70,7 @@ Photo of 2 black-lights aimed while curing the large soda bottle
 The bottles were then cured over about a total of 20 minutes (10 minutes then rotated 90 degrees)keep going until the resin fully hardensthen I would recommend leaving the bottle in the outside in the sun for a full day to fully ensure the curing process is complete
 
 
-![Mobirise Website Builder](/assets/images/img-806.JPG)
+![Mobirise Website Builder](/assets/images/img-806.jpg)
 
 
 
@@ -83,15 +83,15 @@ After curing I tested both bottles using the air-pump while noting the pressure.
 
 
 
-![Mobirise Website Builder](/assets/images/img-810.JPG)
+![Mobirise Website Builder](/assets/images/img-810.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-809.JPG)
+![Mobirise Website Builder](/assets/images/img-809.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-808.JPG)
+![Mobirise Website Builder](/assets/images/img-808.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-807.JPG)
+![Mobirise Website Builder](/assets/images/img-807.jpg)
 
 

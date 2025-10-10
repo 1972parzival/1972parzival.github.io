@@ -2,7 +2,7 @@
 categories: ["Tools & Utilities"]
 date: '2025-10-06'
 description: "Content from Archie"
-image: "/assets/images/image-3.PNG"
+image: "/assets/images/image-3.png"
 slug: archie-page-62
 tags: []
 title: Board Pack
@@ -44,21 +44,21 @@ Scan of notebook page
 Notebook page of latch sketch
 
 
-![Mobirise Website Builder](/assets/images/4.JPG)
+![Mobirise Website Builder](/assets/images/4.jpg)
 
 
 
 
-![Mobirise Website Builder](/assets/images/img-123.JPG)
+![Mobirise Website Builder](/assets/images/img-123.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-126.JPG)
+![Mobirise Website Builder](/assets/images/img-126.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-127.JPG)
+![Mobirise Website Builder](/assets/images/img-127.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-128.JPG)
+![Mobirise Website Builder](/assets/images/img-128.jpg)
 
 
 

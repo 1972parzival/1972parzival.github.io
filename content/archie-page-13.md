@@ -14,7 +14,7 @@ title: IRRC car
 
 
 
-![Mobirise Website Builder](/assets/images/img-9923-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-9923-1076x717.jpg)
 
 
 
@@ -50,7 +50,7 @@ Many of the areas of text, images or information are not final and May contain e
 Shown is a simple test of the motors using 2 batteries each being 1.5 volts for a combined voltage of 3.0v. While this is still significantly less then the 24.0v that the motors are meant to accept it can still be used as a basic test to ensure that the motors are functioning.
 
 
-![Mobirise Website Builder](/assets/images/img-9923-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-9923-1076x717.jpg)
 
 
 
@@ -64,7 +64,7 @@ Image Description
 We used splitter to convert the circle style power connecter to a simple + and - ports, those were then hooked up to a simple motor controller that allows us to control the speed of the motors using a simple knob. The motor controller also has a swhich so we have the ability to quick turn the motors on and off, along with swhiching the overall direction they turn. This functionality is a very similar to what the L293D chip can do.
 
 
-![Mobirise Website Builder](/assets/images/img-657-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-657-1076x717.jpg)
 
 
 
@@ -75,7 +75,7 @@ We used splitter to convert the circle style power connecter to a simple + and -
 I used a basic model from thingiverse to help print some test screws that we will need to have to help build the final shell for the robot and also the connections between the motors and the 3d printed wheels
 
 
-![Mobirise Website Builder](/assets/images/img-661-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-661-1076x717.jpg)
 
 
 
@@ -86,10 +86,10 @@ Image Description
 Image Description
 
 
-![Mobirise Website Builder](/assets/images/img-675-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-675-1076x717.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-670-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-670-1076x717.jpg)
 
 
 
@@ -100,7 +100,7 @@ Image Description
 V2 wheel mid resin print
 
 
-![Mobirise Website Builder](/assets/images/img-9080-1076x604.JPG)
+![Mobirise Website Builder](/assets/images/img-9080-1076x604.jpg)
 
 
 
@@ -111,10 +111,10 @@ Wheel model V2
 Wheel model V1
 
 
-![Mobirise Website Builder](/assets/images/img-9094-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-9094-1076x717.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-9092-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-9092-1076x717.jpg)
 
 
 
@@ -128,7 +128,7 @@ Shown above ^
 Use Mobirise website building software to create multiple sites for commercial and non-profit projects. CLIck on the image in this block to replace it. You can add a description below your image, or on the side. If you want to hide some of the text fields, open the Block parameters, and uncheck relevant options.
 
 
-![Mobirise Website Builder](/assets/images/img-9754-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-9754-1076x717.jpg)
 
 
 
@@ -139,7 +139,7 @@ Use Mobirise website building software to create multiple sites for commercial a
 (carried over from "IR device")
 
 
-![Mobirise Website Builder](/assets/images/untitled-1076x895.JPG)
+![Mobirise Website Builder](/assets/images/untitled-1076x895.jpg)
 
 
 
@@ -158,7 +158,7 @@ Use Mobirise website building software to create multiple sites for commercial a
 Image Description
 
 
-![Mobirise Website Builder](/assets/images/img-9775-1076x604.JPG)
+![Mobirise Website Builder](/assets/images/img-9775-1076x604.jpg)
 
 
 
@@ -169,7 +169,7 @@ Image Description
 Image Description
 
 
-![Mobirise Website Builder](/assets/images/img-9823-1076x604.JPG)
+![Mobirise Website Builder](/assets/images/img-9823-1076x604.jpg)
 
 
 
@@ -180,6 +180,6 @@ Image Description
 Image Description
 
 
-![Mobirise Website Builder](/assets/images/5.JPG)
+![Mobirise Website Builder](/assets/images/5.jpg)
 
 

@@ -23,7 +23,7 @@ title: Basic DC motor
 I've been researching electric motor, and electromagnetism in general for a while as i think it's a really interesting topic, here are some really good videos i found while researching the topic: Video 1Video 2Video 3the short explanation is that current flowing through the copper wire creates a magnetic field. By coiling the wire the magnetic field is dramatically amplified. This field is at certain point repelled to create mechanical power in the form of rotation. and over the last week and after about ~35 attempts, i managed to finally build and test my own little dc motor!
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-07-16-at-10.21.13-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-07-16-at-10.21.13-pm.png)
 
 
 
@@ -31,7 +31,7 @@ I've been researching electric motor, and electromagnetism in general for a whil
 Basic sketch
 
 
-![Mobirise Website Builder](/assets/images/helmet-1.PNG)
+![Mobirise Website Builder](/assets/images/helmet-1.png)
 
 
 

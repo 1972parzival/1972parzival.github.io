@@ -2,7 +2,7 @@
 categories: ["Personal"]
 date: '2025-10-06'
 description: "Use Mobirise website building software to create multiple sites for commercial and non-profit projects. Themes in the Mobirise website builder offer multiple blocks: intros, sliders, galleries, forms."
-image: "/assets/images/6.JPG"
+image: "/assets/images/6.jpg"
 slug: archie-page-8
 tags: []
 title: GPS part 2
@@ -14,7 +14,7 @@ title: GPS part 2
 
 
 
-![Mobirise Website Builder](/assets/images/6.JPG)
+![Mobirise Website Builder](/assets/images/6.jpg)
 
 
 

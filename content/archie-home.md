@@ -2,7 +2,7 @@
 categories: ["Personal"]
 date: '2025-10-06'
 description: "This is my website for showcasing some of the projects I work on and"
-image: "/assets/images/snap-973x1006.JPG"
+image: "/assets/images/snap-973x1006.jpg"
 slug: archie-home
 tags: []
 title: Archie Haddley Morris
@@ -15,7 +15,7 @@ title: Archie Haddley Morris
 This is my website for showcasing some of the projects I work on and services I provide.
 
 
-![Mobirise Website Builder](/assets/images/snap-973x1006.JPG)
+![Mobirise Website Builder](/assets/images/snap-973x1006.jpg)
 
 
 

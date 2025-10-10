@@ -56,10 +56,10 @@ This is an advanced electrical version of the same basic circuit
 This is a basic circuit I used for testing and to get to know the L293D (controls the flow of power and how is it connected) module we are using an ATTINY as the microcontroller (device that controls the L293D and also the device we program) in this.
 
 
-![Mobirise Website Builder](/assets/images/image-1076x823.PNG)
+![Mobirise Website Builder](/assets/images/image-1076x823.png)
 
 
-![Mobirise Website Builder](/assets/images/357363867-2206706542871781-2436752038266051224-n-598x403.PNG)
+![Mobirise Website Builder](/assets/images/357363867-2206706542871781-2436752038266051224-n-598x403.png)
 
 
 
@@ -70,10 +70,10 @@ This is an advanced electrical version of the same Arduino circuit
 Updated schematic for Arduino Uno instead of ATTINY we had to change the code and the format of the code due to Arduino Uno using a different format
 
 
-![Mobirise Website Builder](/assets/images/uno-ad-1076x817.PNG)
+![Mobirise Website Builder](/assets/images/uno-ad-1076x817.png)
 
 
-![Mobirise Website Builder](/assets/images/uno-1076x639.JPG)
+![Mobirise Website Builder](/assets/images/uno-1076x639.jpg)
 
 
 
@@ -84,10 +84,10 @@ A test of possible chemical battery configurations in this circuit
 He we see the number of rotations a minute 16530 (rpm) a hypothetical dc motor would achieve provided the 9v volts from the chemical battery
 
 
-![Mobirise Website Builder](/assets/images/9v-1076x726.PNG)
+![Mobirise Website Builder](/assets/images/9v-1076x726.png)
 
 
-![Mobirise Website Builder](/assets/images/9vmotor-1076x617.PNG)
+![Mobirise Website Builder](/assets/images/9vmotor-1076x617.png)
 
 
 
@@ -98,10 +98,10 @@ A test of possible chemical battery configurations that could be chained togethe
 23.8v volts from the chemical battery = ~47469 rpm
 
 
-![Mobirise Website Builder](/assets/images/24v-1076x641.PNG)
+![Mobirise Website Builder](/assets/images/24v-1076x641.png)
 
 
-![Mobirise Website Builder](/assets/images/24vmotor-1076x606.PNG)
+![Mobirise Website Builder](/assets/images/24vmotor-1076x606.png)
 
 
 
@@ -144,7 +144,7 @@ A delay of 1000 milliseconds (1 second) occurs using delay(1000);.
 The loop then repeats, going back to Step 1 and moving the motors forward again, creating a continuous forward-backward motion pattern for the motors.
 
 
-![Mobirise Website Builder](/assets/images/dc-code-618x829.JPG)
+![Mobirise Website Builder](/assets/images/dc-code-618x829.jpg)
 
 
 
@@ -172,7 +172,7 @@ GIF example of program moving forward for 2 seconds and back for 1
 Here we see one of the motors with the current code we broke down above
 
 
-![Mobirise Website Builder](/assets/images/motor.GIF)
+![Mobirise Website Builder](/assets/images/motor.gif)
 
 
 

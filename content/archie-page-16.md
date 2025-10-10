@@ -28,7 +28,7 @@ I was approached by Mr. Erickson, the principle of Minnetonka High School in ear
 I approached a fellow classmate, Zeen and he informed me that he had already got a very barebones system he can made to help him personally keep track of classes with the older, less complex school schedule. We decided to further improve his basic HTML into a proper PWA (progressive web application) so it could be easily changed and all students could access it from their school issued iPads and personal devices like phones.
 
 
-![Mobirise Website Builder](/assets/images/stage-1-1076x886.JPG)
+![Mobirise Website Builder](/assets/images/stage-1-1076x886.jpg)
 
 
 
@@ -36,7 +36,7 @@ I approached a fellow classmate, Zeen and he informed me that he had already got
 Photo of a part of the code made by Zeem, for the generating schedule data using Python.
 
 
-![Mobirise Website Builder](/assets/images/zeem-1836x1377.JPG)
+![Mobirise Website Builder](/assets/images/zeem-1836x1377.jpg)
 
 
 
@@ -52,7 +52,7 @@ Zeem's statement on backend work of this time: I started out working on the proj
 I contacted Zeen and we worked extremely hard on the project planning out the basics, we started out by making a basic table design on a whiteboard
 
 
-![Mobirise Website Builder](/assets/images/img-9971-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-9971-1076x717.jpg)
 
 
 
@@ -85,7 +85,7 @@ The next step was adding a checkbox system to allow for divs to be adapted depen
 We replaced the logo we used as a place holder to be a proper PNG. This was so it could correctly adapted in size and also fit the entire "item1" div.
 
 
-![Mobirise Website Builder](/assets/images/step-6-1076x510.PNG)
+![Mobirise Website Builder](/assets/images/step-6-1076x510.png)
 
 
 
@@ -96,7 +96,7 @@ We replaced the logo we used as a place holder to be a proper PNG. This was so i
 I added a bug report button that leads to a Google form where users can report a bug and upload a photo of the reported issue if needed. The user's email's are also recorded so we can follow up in person or over email is needed
 
 
-![Mobirise Website Builder](/assets/images/stage-6-1076x1029.JPG)
+![Mobirise Website Builder](/assets/images/stage-6-1076x1029.jpg)
 
 
 
@@ -112,7 +112,7 @@ My father then assisted me on deploying this application to the Azure server he 
 I setup a basic Google doc, for showing beta testers how to report bugs, and also the current website URL. Alongside some common errors they might occur and also where to properly submit feedback for the project.
 
 
-![Mobirise Website Builder](/assets/images/doc-694x759.JPG)
+![Mobirise Website Builder](/assets/images/doc-694x759.jpg)
 
 
 
@@ -123,7 +123,7 @@ I setup a basic Google doc, for showing beta testers how to report bugs, and als
 This Google form collects both short answer and basic numerical data. This allows us to see insights at glance. Then also allowss us to dive deeper into feedback on a per user basis.
 
 
-![Mobirise Website Builder](/assets/images/feedback-form-632x891.JPG)
+![Mobirise Website Builder](/assets/images/feedback-form-632x891.jpg)
 
 
 
@@ -159,7 +159,7 @@ Enhanced adaptability of the main content size.
 Note: Still awaiting a higher resolution logo image.
 
 
-![Mobirise Website Builder](/assets/images/7-1076x508.JPG)
+![Mobirise Website Builder](/assets/images/7-1076x508.jpg)
 
 
 
@@ -170,7 +170,7 @@ Note: Still awaiting a higher resolution logo image.
 Use Mobirise website building software to create multiple sites for commercial and non-profit projects. CLIck on the image in this block to replace it. You can add a description below your image, or on the side. If you want to hide some of the text fields, open the Block parameters, and uncheck relevant options.
 
 
-![Mobirise Website Builder](/assets/images/mobile-323x698.JPG)
+![Mobirise Website Builder](/assets/images/mobile-323x698.jpg)
 
 
 
@@ -181,7 +181,7 @@ Use Mobirise website building software to create multiple sites for commercial a
 After a lot of thinking i decided on the domain "studentassist. App" due to it's low price and potential to be used for other school related applications. The domain was purchased through namecheap, they had the best prices and also had many help tools in later configuration. After buying I used the Azure and namecheap panels to add a TXT and CNAME record so they could correctly connect.
 
 
-![Mobirise Website Builder](/assets/images/domain-1076x377.JPG)
+![Mobirise Website Builder](/assets/images/domain-1076x377.jpg)
 
 
 
@@ -192,7 +192,7 @@ After a lot of thinking i decided on the domain "studentassist. App" due to it's
 If anchor time is present in the current day it is highlighted in Dark blue. The current class period is also highlighted in a light yellow. This allows the user to easily see the most important infomation right away
 
 
-![Mobirise Website Builder](/assets/images/swhicher-765x569.JPG)
+![Mobirise Website Builder](/assets/images/swhicher-765x569.jpg)
 
 
 
@@ -207,13 +207,13 @@ We were also featured several times on the principle's public Instagram account
 
 
 
-![Mobirise Website Builder](/assets/images/insta1-876x1194.JPG)
+![Mobirise Website Builder](/assets/images/insta1-876x1194.jpg)
 
 
-![Mobirise Website Builder](/assets/images/insta2-876x1245.JPG)
+![Mobirise Website Builder](/assets/images/insta2-876x1245.jpg)
 
 
-![Mobirise Website Builder](/assets/images/insta3-837x2048.JPG)
+![Mobirise Website Builder](/assets/images/insta3-837x2048.jpg)
 
 
 
@@ -227,7 +227,7 @@ We were also featured several times on the principle's public Instagram account
 We then got to work going through over 50 bug reports that we received over the first 3 weeks. Wereviewed the issue and image they submitted then reached out to the individuals if needed when trying to solve the bug.
 
 
-![Mobirise Website Builder](/assets/images/sheets-1076x655.JPG)
+![Mobirise Website Builder](/assets/images/sheets-1076x655.jpg)
 
 
 
@@ -240,10 +240,10 @@ We then got to work going through over 50 bug reports that we received over the 
 
 
 
-![Mobirise Website Builder](/assets/images/CSS-improve-2-1076x1286.JPG)
+![Mobirise Website Builder](/assets/images/CSS-improve-2-1076x1286.jpg)
 
 
-![Mobirise Website Builder](/assets/images/CSS-improve-1-1076x1230.JPG)
+![Mobirise Website Builder](/assets/images/CSS-improve-1-1076x1230.jpg)
 
 
 
@@ -254,7 +254,7 @@ We then got to work going through over 50 bug reports that we received over the 
 Next Ren created a basic version of the site with all the new visuals added. Though it didn't contain the "guts" of the application it allowed us to have a idea of a final product and also the gave us the CSS code to achieve it.
 
 
-![Mobirise Website Builder](/assets/images/shell-1076x511.JPG)
+![Mobirise Website Builder](/assets/images/shell-1076x511.jpg)
 
 
 
@@ -265,7 +265,7 @@ Next Ren created a basic version of the site with all the new visuals added. Tho
 Students didn't seem to like the clock and also the removal of the "this class end in X minutes" section. So we fixed both problems by implementing a brand new system that allows a circular timer system. It shows how long is left in class based on the how far it has been since the start of the hour. It also changes color depending on the remaining time left in class and has the previously mentioned rendering of the "this class end in X minutes" section that fits within the circle.
 
 
-![Mobirise Website Builder](/assets/images/sa.JPG)
+![Mobirise Website Builder](/assets/images/sa.jpg)
 
 
 

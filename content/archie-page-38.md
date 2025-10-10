@@ -2,7 +2,7 @@
 categories: ["Chemistry & Materials"]
 date: '2025-10-06'
 description: "Tools:-bowl-heat source (stovetop)-measuring cup-some mold (or metal"
-image: "/assets/images/img-633-1076x717.JPG"
+image: "/assets/images/img-633-1076x717.jpg"
 slug: archie-page-38
 tags: []
 title: Biodegradable Plastic Part 4
@@ -23,7 +23,7 @@ title: Biodegradable Plastic Part 4
 Tools:-bowl-heat source (stovetop)-measuring cup-some mold (or metal tray with tinfoil)-over mitt-pan-spatula-rubber gloves Ingredient Ratios:21 water3 starch3 vinegar 3 glycerin
 
 
-![Mobirise Website Builder](/assets/images/img-588-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-588-1076x717.jpg)
 
 
 
@@ -36,47 +36,47 @@ Tools:-bowl-heat source (stovetop)-measuring cup-some mold (or metal tray with t
 
 
 
-![Mobirise Website Builder](/assets/images/img-600-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-600-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-599-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-599-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-598-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-598-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-597-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-597-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-596-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-596-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-595-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-595-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-591-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-591-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-590-1900x1267.JPG)
+![Mobirise Website Builder](/assets/images/img-590-1900x1267.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-589-1900x1267.JPG)
-
-
-
-
-![Mobirise Website Builder](/assets/images/img-629-1076x717.JPG)
-
-
-![Mobirise Website Builder](/assets/images/img-631-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-589-1900x1267.jpg)
 
 
 
 
-![Mobirise Website Builder](/assets/images/img-634-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-629-1076x717.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-633-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-631-1076x717.jpg)
+
+
+
+
+![Mobirise Website Builder](/assets/images/img-634-1076x717.jpg)
+
+
+![Mobirise Website Builder](/assets/images/img-633-1076x717.jpg)
 
 
 
@@ -87,6 +87,6 @@ Tools:-bowl-heat source (stovetop)-measuring cup-some mold (or metal tray with t
 It seems that the given ratio of glycerin was too high and it appears to have become more of a gel like substance. Though this is not the desired result it's by far the closest I've got, with a few more adjustments I think I can get a proper plastic. It regard to this "gel" substance it is very interesting, it's quite strong when compared to similar substances and i could see it being used in products such as: pillows? Shoe soles? Fabrics? Kids toys? Coats? To conduct or insulate heat? keep in mind it's still 100% biodegradable
 
 
-![Mobirise Website Builder](/assets/images/img-632-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-632-1076x717.jpg)
 
 

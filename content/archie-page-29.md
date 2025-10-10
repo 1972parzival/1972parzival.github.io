@@ -2,7 +2,7 @@
 categories: ["Academic & Documentation"]
 date: '2025-10-06'
 description: "The base is what supports the users foot, it"
-image: "/assets/images/img-349-5184x3456.JPG"
+image: "/assets/images/img-349-5184x3456.jpg"
 slug: archie-page-29
 tags: []
 title: 3d shoe
@@ -23,7 +23,7 @@ title: 3d shoe
 The base is what supports the users foot, it's printed in PLA to ensure that it is stable and secure when in use. The base is also what the Cover attaches on top of and what the footer attaches to the bottom of.
 
 
-![Mobirise Website Builder](/assets/images/base-725x529.JPG)
+![Mobirise Website Builder](/assets/images/base-725x529.jpg)
 
 
 
@@ -34,15 +34,15 @@ The base is what supports the users foot, it's printed in PLA to ensure that it 
 The cover is what forms a major of the final product's shape. It is printed out of TPU which is very flexible, perfect as a replacement for the traditional fabrics covering a regular shoe.  The footer is made of TPU and is added to soften the impact of each step the user takes. Both of these sections are added to the base using superglue in this version but in the future methods like bolts and threads or rod connections could be utilized for a cleaner look.
 
 
-![Mobirise Website Builder](/assets/images/cover-865x553.JPG)
+![Mobirise Website Builder](/assets/images/cover-865x553.jpg)
 
 
 
 
-![Mobirise Website Builder](/assets/images/img-350-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-350-1076x717.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-349-1076x717.JPG)
+![Mobirise Website Builder](/assets/images/img-349-1076x717.jpg)
 
 
 

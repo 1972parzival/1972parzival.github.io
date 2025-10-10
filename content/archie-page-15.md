@@ -2,7 +2,7 @@
 categories: ["Academic & Documentation"]
 date: '2025-10-06'
 description: "many of the areas of text, images or information are not final and May"
-image: "/assets/images/d1-1076x574.JPG"
+image: "/assets/images/d1-1076x574.jpg"
 slug: archie-page-15
 tags: []
 title: sketch notes
@@ -35,10 +35,10 @@ This is a page for a list of random notes and ideas (some of them likely don't 
 
 
 
-![Mobirise Website Builder](/assets/images/a2-1076x1522.JPG)
+![Mobirise Website Builder](/assets/images/a2-1076x1522.jpg)
 
 
-![Mobirise Website Builder](/assets/images/a1-1076x1740.JPG)
+![Mobirise Website Builder](/assets/images/a1-1076x1740.jpg)
 
 
 
@@ -51,10 +51,10 @@ Just basic notes on how hydroelectric power is actually more like a gravitationa
 
 
 
-![Mobirise Website Builder](/assets/images/b2-1076x1576.JPG)
+![Mobirise Website Builder](/assets/images/b2-1076x1576.jpg)
 
 
-![Mobirise Website Builder](/assets/images/b1-1076x1668.JPG)
+![Mobirise Website Builder](/assets/images/b1-1076x1668.jpg)
 
 
 
@@ -67,10 +67,10 @@ Idea for a system that would process files metadata, and the content of media it
 
 
 
-![Mobirise Website Builder](/assets/images/c2-1076x1867.JPG)
+![Mobirise Website Builder](/assets/images/c2-1076x1867.jpg)
 
 
-![Mobirise Website Builder](/assets/images/c1-1076x1743.JPG)
+![Mobirise Website Builder](/assets/images/c1-1076x1743.jpg)
 
 
 
@@ -83,7 +83,7 @@ A "ghost gear" is a type of gearbox that allows the able to change gear ratios w
 
 
 
-![Mobirise Website Builder](/assets/images/d1-1836x980.JPG)
+![Mobirise Website Builder](/assets/images/d1-1836x980.jpg)
 
 
 
@@ -93,7 +93,7 @@ A "ghost gear" is a type of gearbox that allows the able to change gear ratios w
 
 
 
-![Mobirise Website Builder](/assets/images/scan0397-1076x1395.JPG)
+![Mobirise Website Builder](/assets/images/scan0397-1076x1395.jpg)
 
 
 ![Mobirise Website Builder](/assets/images/scan0396-1076x800.JPEG)
@@ -109,10 +109,10 @@ A "ghost gear" is a type of gearbox that allows the able to change gear ratios w
 
 
 
-![Mobirise Website Builder](/assets/images/scan0401-1076x1597.JPG)
+![Mobirise Website Builder](/assets/images/scan0401-1076x1597.jpg)
 
 
-![Mobirise Website Builder](/assets/images/scan0400-1076x1515.JPG)
+![Mobirise Website Builder](/assets/images/scan0400-1076x1515.jpg)
 
 
 
@@ -120,12 +120,12 @@ A "ghost gear" is a type of gearbox that allows the able to change gear ratios w
 ![Mobirise Website Builder](/assets/images/scan0403-1076x779.JPEG)
 
 
-![Mobirise Website Builder](/assets/images/scan0402-1076x1564.JPG)
+![Mobirise Website Builder](/assets/images/scan0402-1076x1564.jpg)
 
 
 
 
-![Mobirise Website Builder](/assets/images/scan0404-1836x2635.JPG)
+![Mobirise Website Builder](/assets/images/scan0404-1836x2635.jpg)
 
 
 
@@ -146,7 +146,7 @@ The ekey is a basic idea for an adaptive keyboard and control system for a e-ink
 ![Mobirise Website Builder](/assets/images/scan0409-1076x1495.JPEG)
 
 
-![Mobirise Website Builder](/assets/images/scan0408-1076x1375.JPG)
+![Mobirise Website Builder](/assets/images/scan0408-1076x1375.jpg)
 
 
 
@@ -159,6 +159,6 @@ This would be a fun device that allows the user to throw a baseball sized drone 
 
 
 
-![Mobirise Website Builder](/assets/images/scan0407-1836x1327.JPG)
+![Mobirise Website Builder](/assets/images/scan0407-1836x1327.jpg)
 
 

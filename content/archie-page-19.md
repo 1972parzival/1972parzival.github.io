@@ -39,6 +39,6 @@ I started by just making a rough mock up of the "BBM microfloppy" as shown in t
 (Quarter for scale)
 
 
-![Mobirise Website Builder](/assets/images/img-22-1836x1224.JPG)
+![Mobirise Website Builder](/assets/images/img-22-1836x1224.jpg)
 
 

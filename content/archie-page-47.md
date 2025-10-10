@@ -2,7 +2,7 @@
 categories: ["Electronics & Arduino"]
 date: '2025-10-06'
 description: "Helpful resources used during research: vid 1vid 2wiki 1wiki 2"
-image: "/assets/images/cycle-1.PNG"
+image: "/assets/images/cycle-1.png"
 slug: archie-page-47
 tags: []
 title: DIY Refrigeration System
@@ -25,10 +25,10 @@ Pressure–volume diagram
 Vapor compression refrigeration
 
 
-![Mobirise Website Builder](/assets/images/re-cycle.PNG)
+![Mobirise Website Builder](/assets/images/re-cycle.png)
 
 
-![Mobirise Website Builder](/assets/images/cycle.PNG)
+![Mobirise Website Builder](/assets/images/cycle.png)
 
 
 
@@ -46,16 +46,16 @@ Vapor-compression refrigeration is the most widely used method for air condition
 
 
 
-![Mobirise Website Builder](/assets/images/img-1604.JPG)
+![Mobirise Website Builder](/assets/images/img-1604.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-1610.JPG)
+![Mobirise Website Builder](/assets/images/img-1610.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-1614.JPG)
+![Mobirise Website Builder](/assets/images/img-1614.jpg)
 
 
-![Mobirise Website Builder](/assets/images/img-1671.JPG)
+![Mobirise Website Builder](/assets/images/img-1671.jpg)
 
 
 
@@ -66,7 +66,7 @@ Vapor-compression refrigeration is the most widely used method for air condition
 After spending hours building and gluing ever single seem i could find i finally took the system outside to test it. Sadly over a few hours i could not get it to work. Some of the issues i faced:- motor overheating- extremely small un-viewable gaps and leaks- small cooling fan breaking- butane not flowing through the tubing - ineffective butane nozzle - motor breaking
 
 
-![Mobirise Website Builder](/assets/images/img-1673.JPG)
+![Mobirise Website Builder](/assets/images/img-1673.jpg)
 
 
 
@@ -77,6 +77,6 @@ After spending hours building and gluing ever single seem i could find i finally
 Unfortunately i'm going to have call this project a failure for now, as i just don't have the capital and materials that i need to do it justice. I will certainly return to finish this project with a later post when i can, as i think this project would perfectly demonstrate the fundamentals of refrigeration and modern cooling systems.
 
 
-![Mobirise Website Builder](/assets/images/img-1672.JPG)
+![Mobirise Website Builder](/assets/images/img-1672.jpg)
 
 

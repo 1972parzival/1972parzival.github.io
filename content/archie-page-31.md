@@ -2,7 +2,7 @@
 categories: ["Electronics & Arduino"]
 date: '2025-10-06'
 description: "me behind desk (center) my brother ollie typing (left)"
-image: "/assets/images/23843239-10111001813753980-2935638262161517611-n-900x600.JPG"
+image: "/assets/images/23843239-10111001813753980-2935638262161517611-n-900x600.jpg"
 slug: archie-page-31
 tags: []
 title: childhood projects
@@ -12,7 +12,7 @@ title: childhood projects
 Image Description
 
 
-![Mobirise Website Builder](/assets/images/23843239-10111001813753980-2935638262161517611-n-900x600.JPG)
+![Mobirise Website Builder](/assets/images/23843239-10111001813753980-2935638262161517611-n-900x600.jpg)
 
 
 
@@ -31,10 +31,10 @@ Me behind desk (center) my brother ollie typing (left)
 Me behind the desk playing matchbox system against people at the event(left) and the Raspberry Pi running a vision model (right)
 
 
-![Mobirise Website Builder](/assets/images/matchbox2-960x720.JPG)
+![Mobirise Website Builder](/assets/images/matchbox2-960x720.jpg)
 
 
-![Mobirise Website Builder](/assets/images/matchbox-960x720.JPG)
+![Mobirise Website Builder](/assets/images/matchbox-960x720.jpg)
 
 
 

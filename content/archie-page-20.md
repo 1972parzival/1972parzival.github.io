@@ -2,7 +2,7 @@
 categories: ["Academic & Documentation"]
 date: '2025-10-06'
 description: "What is life? Life. Life is. Life is suffering. What is the meaning of life? What"
-image: "/assets/images/img-509195-1076x1068.PNG"
+image: "/assets/images/img-509195-1076x1068.png"
 slug: archie-page-20
 tags: []
 title: LOGBOOK

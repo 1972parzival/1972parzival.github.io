@@ -2,7 +2,7 @@
 categories: ["Academic & Documentation", "Electronics & Arduino"]
 date: '2025-10-06'
 description: ""
-image: "/assets/images/campus-bg-1920x1079.JPG"
+image: "/assets/images/campus-bg-1920x1079.jpg"
 slug: archie-page-23
 tags: []
 title: "murray state"
@@ -28,7 +28,7 @@ title: "murray state"
 The core idea of the project is to setup these systems on either side of the entrance/exit, each side will have 2 long range ultrasonic sensor for detecting the passing of cars on that side. Each side will also includes a IR beam and a IR receiver. All the data from the i receivers and the ultrasonic sensors will be fed back to the microcontroller that will then send relative updates over LoRa to a WiFi connected server that will publish new infomation to the public website
 
 
-![Mobirise Website Builder](/assets/images/blank-diagram-1076x598.PNG)
+![Mobirise Website Builder](/assets/images/blank-diagram-1076x598.png)
 
 
 

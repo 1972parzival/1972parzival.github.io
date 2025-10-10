@@ -2,7 +2,7 @@
 categories: ["Electronics & Arduino"]
 date: '2025-10-06'
 description: "Include Statements: The code includes necessary libraries for communication with the GPS module, parsing GPS data, and controlling the OLED display. Serial and Variable Initialization: SoftwareSerial setup."
-image: "/assets/images/img-8282-5184x3456.JPG"
+image: "/assets/images/img-8282-5184x3456.jpg"
 slug: archie-page-7
 tags: []
 title: GPS device
@@ -14,7 +14,7 @@ title: GPS device
 
 
 
-![Mobirise Website Builder](/assets/images/img-8283-1836x1224.JPG)
+![Mobirise Website Builder](/assets/images/img-8283-1836x1224.jpg)
 
 
 
@@ -36,19 +36,19 @@ title: GPS device
 
 
 
-![Mobirise Website Builder](/assets/images/1-517x689.JPG)
+![Mobirise Website Builder](/assets/images/1-517x689.jpg)
 
 
-![Mobirise Website Builder](/assets/images/2-1-441x723.JPG)
+![Mobirise Website Builder](/assets/images/2-1-441x723.jpg)
 
 
-![Mobirise Website Builder](/assets/images/3-1-533x500.JPG)
+![Mobirise Website Builder](/assets/images/3-1-533x500.jpg)
 
 
-![Mobirise Website Builder](/assets/images/4-350x534.JPG)
+![Mobirise Website Builder](/assets/images/4-350x534.jpg)
 
 
-![Mobirise Website Builder](/assets/images/5-550x623.JPG)
+![Mobirise Website Builder](/assets/images/5-550x623.jpg)
 
 
 
@@ -115,7 +115,7 @@ Manipulates the y variable to create dynamic animations. TLDR: The code essenti
 #### Video Demo
 
 
-![Mobirise Website Builder](/assets/images/img-8248-5184x3456.JPG)
+![Mobirise Website Builder](/assets/images/img-8248-5184x3456.jpg)
 
 
 
@@ -123,6 +123,6 @@ Manipulates the y variable to create dynamic animations. TLDR: The code essenti
 Final GPS system GIF.
 
 
-![Mobirise Website Builder](/assets/images/GPS-rotate.GIF)
+![Mobirise Website Builder](/assets/images/GPS-rotate.gif)
 
 

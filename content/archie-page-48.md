@@ -2,7 +2,7 @@
 categories: ["Chemistry & Materials", "Experimental"]
 date: '2025-10-06'
 description: "The point of this project is to finally build a proper website for AII3,"
-image: "/assets/images/aii3.JPG"
+image: "/assets/images/aii3.jpg"
 slug: archie-page-48
 tags: []
 title: AII3. org
@@ -28,7 +28,7 @@ The point of this project is to finally build a proper website for AII3, one tha
 At the moment the context shown when going to AII3. Org looks like this (see image). I set this up several months ago to simply show that i own the page and that i was planning to build a proper page in the near future. The basic page features a black and white scheme with a slowly appearing ASCII artwork and basic contact info. This work in progress page can still be found on my GitHub
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-23-at-7.38.21-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-23-at-7.38.21-pm.png)
 
 
 
@@ -56,7 +56,7 @@ Screenshot of plotter vision system
 The frame system needs to be able to:1. Display a STL model2. Do so in black and white3. Change the selected model4. Work within React. JSAfter a lot of research i found a open source project that would act as a perfect base that i could Reactor and build up into the frame system i need. Called Plotter-Vision it is based upon the P5. JS JavaScript library. Plotter-Vision: Web GitHub BlogMade by Trammell Hudson
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-23-at-8.00.17-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-23-at-8.00.17-pm.png)
 
 
 
@@ -78,7 +78,7 @@ Screenshot of the React-p5 library
 To do this I used the React-p5 library (Link), installed through the npm command. And leveraging the example sketch while referring back to demos from the P5. JS website i was able to get a basic P5. JS app working within React. JS (shown in the image below)
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-24-at-12.30.09-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-24-at-12.30.09-pm.png)
 
 
 
@@ -86,7 +86,7 @@ To do this I used the React-p5 library (Link), installed through the npm command
 Basic p5. Js app running within React
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-24-at-12.40.14-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-24-at-12.40.14-pm.png)
 
 
 
@@ -100,7 +100,7 @@ Basic p5. Js app running within React
 I've used p5. Js before using their online editor, messing with demos for a bit of fun but have never applied it to a proper app i plan to deploy. To refresh my memory and just get used to the new syntax needed for p5 in React i made a basic "pong" style app to refamiliarize myself
 
 
-![Mobirise Website Builder](/assets/images/screen-shot-2024-06-24-at-9.07.04-pm.PNG)
+![Mobirise Website Builder](/assets/images/screen-shot-2024-06-24-at-9.07.04-pm.png)
 
 
 
@@ -111,6 +111,6 @@ I've used p5. Js before using their online editor, messing with demos for a bit 
 Image Description
 
 
-![Mobirise Website Builder](/assets/images/5.JPG)
+![Mobirise Website Builder](/assets/images/5.jpg)
 
 
