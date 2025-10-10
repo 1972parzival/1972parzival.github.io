@@ -1,0 +1,115 @@
+import { getPostById, getAllPosts } from '@/lib/posts';
+import { getMarkdownPost } from '@/lib/markdown';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import MobiriseContentRenderer from '@/components/MobiriseContentRenderer';
+
+interface PostPageProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  try {
+    // First try to get posts from the normal method
+    const posts = await getAllPosts();
+    if (posts && posts.length > 0) {
+      console.log(`generateStaticParams: Found ${posts.length} posts`);
+      return posts.map((post) => ({
+        slug: post.slug,
+      }));
+    }
+    
+    // Fallback: directly read content directory
+    const { default: fs } = await import('fs');
+    const { default: path } = await import('path');
+    const contentDir = path.join(process.cwd(), 'content');
+    const filenames = fs.readdirSync(contentDir);
+    const slugs = filenames
+      .filter(name => name.endsWith('.md'))
+      .map(name => name.replace(/\.md$/, ''));
+    
+    console.log(`generateStaticParams fallback: Found ${slugs.length} markdown files`);
+    return slugs.map((slug) => ({ slug }));
+    
+  } catch (error) {
+    console.error('Error in generateStaticParams:', error);
+    // Return empty array as fallback to prevent build errors
+    return [];
+  }
+}
+
+export default async function PostPage({ params }: PostPageProps) {
+  const { slug } = await params;
+  const post = await getPostById(slug);
+
+  if (!post) {
+    notFound();
+  }
+
+  // Try to get markdown content
+  const markdownPost = await getMarkdownPost(slug);
+
+  return (
+    <>
+      {/* Header Section with Title */}
+      <section className="content4 cid-uBU3VQlp0E mbr-bg-black" id="content4-cru">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="title col-md-12 col-lg-10">
+              <h3 className="mbr-section-title mbr-fonts-style align-center mb-4 display-2 mbr-white">
+                <strong>{post.title}</strong>
+              </h3>
+
+              <h4 className="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-5 mbr-white">
+                <><strong>Archie Haddley-Morris</strong>
+                  <em> • {new Date(post.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}</em>
+                </>
+              </h4>
+
+              <h4 className="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-5 mbr-white">
+                {post.description}
+              </h4>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Breadcrumb Section */}
+      <section className="content1 cid-content mbr-bg-black" id="content1-breadcrumb">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-12 col-lg-10">
+              <div className="mb-4">
+                <Link href="/posts" className="link text-primary display-7">
+                  ← Back to Posts
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Render markdown content in Mobirise sections */}
+      {markdownPost?.contentHtml ? (
+        <MobiriseContentRenderer markdownContent={markdownPost.contentHtml} />
+      ) : (
+        <section className="content5 cid-content5 mbr-bg-black" data-bs-version="5.1">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-md-12 col-lg-10">
+                <div className="alert alert-warning">
+                  <strong>Note:</strong> Content is being processed. The original HTML content
+                  from <code>{slug}.html</code> will be displayed here.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+    </>
+  );
+}
