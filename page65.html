@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html  >
+<head>
+  <!-- Site made with Mobirise Website Builder v5.9.18, https://mobirise.com -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Mobirise v5.9.18, mobirise.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+  <link rel="shortcut icon" href="assets/images/img-509195-1076x1068.png" type="image/x-icon">
+  <meta name="description" content="">
+  
+  
+  <title>Understanding Gears</title>
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-grid.min.css">
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap-reboot.min.css">
+  <link rel="stylesheet" href="assets/dropdown/css/style.css">
+  <link rel="stylesheet" href="assets/socicon/css/styles.css">
+  <link rel="stylesheet" href="assets/theme/css/style.css">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Jost:100,200,300,400,500,600,700,800,900,100i,200i,300i,400i,500i,600i,700i,800i,900i&display=swap"></noscript>
+  <link rel="preload" as="style" href="assets/mobirise/css/mbr-additional.css?v=RUMKoA"><link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css?v=RUMKoA" type="text/css">
+
+  
+  
+  
+</head>
+<body>
+  
+  <section data-bs-version="5.1" class="menu menu2 cid-sFCw1qGFAI" once="menu" id="menu2-kf">
+    
+    <nav class="navbar navbar-dropdown navbar-expand-lg">
+        <div class="container">
+            <div class="navbar-brand">
+                <span class="navbar-logo">
+                    <a href="index.html">
+                        <img src="assets/images/img-509195-1076x1068.png" alt="Mobirise Website Builder" style="height: 6.2rem;">
+                    </a>
+                </span>
+                
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbarSupportedContent" data-bs-target="#navbarSupportedContent" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav nav-dropdown nav-right" data-app-modern-menu="true"><li class="nav-item"><a class="nav-link link text-danger text-primary display-4" href="page4.html">DevLog</a></li>
+                    
+                    <li class="nav-item"><a class="nav-link link text-danger text-primary display-4" href="page5.html">Photography</a></li><li class="nav-item"><a class="nav-link link text-danger text-primary display-4" href="page26.html">Papers</a></li><li class="nav-item"><a class="nav-link link text-danger text-primary display-4" href="page31.html">Old Projects</a></li><li class="nav-item"><a class="nav-link link text-danger text-primary display-4" href="page2.html">Lawn Care</a></li></ul>
+                
+                
+            </div>
+        </div>
+    </nav>
+</section>
+
+<section data-bs-version="5.1" class="content4 cid-uAICyEh37q" id="content4-kg">
+    
+
+    
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="title col-md-12 col-lg-10">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2"><strong>Understanding Gears</strong></h3>
+                <h4 class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-5">
+                    Through the lens of math</h4>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+<section data-bs-version="5.1" class="image1 cid-uAICFyFaLt" id="image1-kh">
+    
+
+    
+    
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="image-wrapper">
+                    <img src="assets/images/4.jpg" alt="Mobirise Website Builder">
+                    <p class="mbr-description mbr-fonts-style pt-2 align-center display-4">
+                    Notebook Scan</p>
+                </div>
+            </div>
+            <div class="col-12 col-lg">
+                <div class="text-wrapper">
+                    <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5"><strong>Initial&nbsp;thoughts&nbsp;</strong></h3>
+                    <p class="mbr-text mbr-fonts-style display-7">I was merely sitting down thinking about gears—especially circular gears—and wondering how they came into being and how they were first modeled. The purpose of this post is to attempt recreating a method to create gears using only simple programming tools like arrays and basic mathematics. I am deliberately not researching how gears were historically made or leveraging AI for guidance, as that would defeat the spirit of the challenge. Now, to break down my thoughts on the subject.<br><br>A gear, in the simplest sense, is just a function of gaps and material that link together. Shown in the top left is a roughly half section of zero height, with the second half consisting of a linear rise, a flat top, and a linear fall. I have termed this a “gearic cycle.” One way to think of it is as the default state—like in a straight gear, where this gearic cycle simply repeats along its length.<br><br>When we consider a circle, the gearic cycle can be thought of as applied along a circle of infinite radius. At infinite radius, the distance between points A and B is at its maximum value. As the radius decreases from infinity, the distance between A and B decreases proportionally to the arc. This assumes the size of the gearic cycle remains constant and does not scale directly as the radius decreases.<br><br>In terms of equations, we know that the circumference of a circle is:<br> <br>C = 2(pi)R.<br><br>Logically, the length of a single gearic cycle divided by the circumference of the circle gives the maximum number of possible cycles:<br><br>C/L=N (or C/N=L)<br><br>Therefore<br><br>n= (2(pi)R)/L and R = (NL)/2(pi)<br><br>From this, we can see that the ratio between gears is fundamentally determined by the difference in the number of cycles they contain. This allows us to estimate the radii of two circles, each with a cycle length of 1, that would result in a 20:1 gear ratio (as shown in the picture).<br></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section data-bs-version="5.1" class="image2 cid-uAIIcuH82k" id="image2-ki">
+    
+
+    
+    
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="image-wrapper">
+                    <img src="assets/images/screen-shot-2025-01-23-at-10.23.56-am.png" alt="Mobirise Website Builder">
+                    <p class="mbr-description mbr-fonts-style mt-2 align-center display-4">
+                        <a href="https://www.mathsisfun.com/algebra/trig-interactive-unit-circle.html" class="text-primary">Circle Properties Visualizer</a></p>
+                </div>
+            </div>
+            <div class="col-12 col-lg">
+                <div class="text-wrapper">
+                    <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                        <strong>But how do i apply a gearic function to a circle?</strong></h3>
+                    <p class="mbr-text mbr-fonts-style display-7">
+                        .</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section data-bs-version="5.1" class="image1 cid-uAIIlzwntv" id="image1-kj">
+    
+
+    
+    
+
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-6">
+                <div class="image-wrapper">
+                    <img src="assets/images/4.jpg" alt="Mobirise Website Builder">
+                    
+                </div>
+            </div>
+            <div class="col-12 col-lg">
+                <div class="text-wrapper">
+                    <h3 class="mbr-section-title mbr-fonts-style mb-3 display-5">
+                        <strong>Resulting code&nbsp;</strong></h3>
+                    <p class="mbr-text mbr-fonts-style display-7">
+                        .</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><section class="display-7" style="padding: 0;align-items: center;justify-content: center;flex-wrap: wrap;    align-content: center;display: flex;position: relative;height: 4rem;"><a href="https://mobiri.se/" style="flex: 1 1;height: 4rem;position: absolute;width: 100%;z-index: 1;"><img alt="" style="height: 4rem;" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="></a><p style="margin: 0;text-align: center;" class="display-7">&#8204;</p><a style="z-index:1" href="https://mobirise.com/builder/ai-website-builder.html">Free AI Website Software</a></section><script src="assets/bootstrap/js/bootstrap.bundle.min.js"></script>  <script src="assets/smoothscroll/smooth-scroll.js"></script>  <script src="assets/ytplayer/index.js"></script>  <script src="assets/dropdown/js/navbar-dropdown.js"></script>  <script src="assets/theme/js/script.js"></script>  
+  
+  
+</body>
+</html>
