@@ -1,0 +1,150 @@
+/* General container style */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar styles */
+.sidebar {
+  width: 200px; /* Fixed width for sidebar */
+  padding: 20px;
+  background-color: black;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional: adds a shadow to the sidebar */
+  overflow-y: auto; /* Ensure the sidebar can scroll if the list is long */
+  position: relative;
+  color: #fff; /* Make text color white for contrast */
+  font-family: 'Courier New', Courier, monospace; /* Monospace font for terminal-like effect */
+}
+
+/* List of models inside the sidebar */
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 8px;
+  cursor: pointer;
+  font-size: 16px; /* Adjust font size for better readability */
+  letter-spacing: 0.5px; /* Slight letter spacing for terminal effect */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+/* Sidebar item selected */
+.sidebar li.selected {
+  background-color: #333; /* Darker background when selected */
+}
+
+/* Sidebar item highlighted */
+.sidebar li.highlighted {
+  background-color: #444; /* Slightly lighter background when hovered */
+}
+
+/* Sidebar heading */
+.sidebar h3 {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: normal;
+  text-transform: uppercase;
+}
+
+/* Right container for ASCII art and canvas */
+.right-container {
+  flex: 1; /* Take up remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+  padding: 20px;
+}
+
+
+
+/* Ensure the canvas container takes up all remaining space */
+.canvas-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Make sure canvas itself is properly sized */
+.canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* Hide sidebar and place dropdown at the bottom on small screens */
+@media (max-width: 950px) {
+  .container {
+    flex-direction: column; /* Stack elements vertically */
+    position: relative;
+  }
+
+  .sidebar {
+    display: none; /* Hide the sidebar */
+  }
+
+  .dropdown-container {
+    display: block;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    position: fixed; /* Fix the dropdown at the bottom */
+    bottom: 0;
+    width: 100%; /* Full width of the screen */
+    z-index: 1000; /* Ensure it stays on top */
+  }
+
+  .dropdown-container select {
+    width: 100%;
+    padding: 10px;
+    background-color: #444;
+    color: white;
+    border: none;
+    outline: none;
+  }
+
+  .right-container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 50px; /* Add padding to prevent overlap with the dropdown */
+  }
+}
+
+/* ASCII art container */
+.ascii-art {
+  font-family: monospace;
+  white-space: pre-wrap;
+  text-align: center;
+  font-size: 16px;
+  width: 100%;
+  min-height: 100%; /* Ensure it takes up full height of the container */
+  display: flex;
+
+  word-wrap: break-word;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Allow the ASCII art to take up available space */
+}
+/* Default font size for larger screens */
+
+
+/* For screens smaller than 800px */
+@media (max-width: 950px) {
+  .ascii-art {
+    font-size: 12px; /* Smaller font size for smaller screens */
+  }
+}
+
+/* For screens smaller than 500px */
+@media (max-width: 500px) {
+  .ascii-art {
+    font-size: 6px; /* Even smaller font size for very small screens */
+  }
+}

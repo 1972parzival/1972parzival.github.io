@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graphing Tool</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: #1a1a1a;
+    color: #ddd;
+    overflow: hidden;
+  }
+
+  #main {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  #panel {
+    width: 270px;
+    padding: 12px;
+    background: #242424;
+    overflow-y: auto;
+    flex-shrink: 0;
+    border-right: 1px solid #333;
+  }
+
+  h3 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 16px 0 7px;
+  }
+  h3:first-child { margin-top: 4px; }
+
+  /* Variable rows */
+  .var-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 5px 0;
+  }
+  .var-row label {
+    font-size: 12px;
+    color: #aaa;
+    width: 120px;
+    flex-shrink: 0;
+    line-height: 1.3;
+  }
+  .var-row input[type=number] {
+    flex: 1;
+    background: #2e2e2e;
+    border: 1px solid #3a3a3a;
+    border-radius: 5px;
+    color: #ddd;
+    font-size: 13px;
+    padding: 4px 7px;
+    font-family: monospace;
+    min-width: 0;
+  }
+  .var-row input[type=number]:focus {
+    outline: none;
+    border-color: #555;
+  }
+
+  /* Function rows */
+  .fn-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 3px 0;
+  }
+  .fn-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .fn-row input[type=text] {
+    flex: 1;
+    background: #2e2e2e;
+    border: 1px solid #3a3a3a;
+    border-radius: 5px;
+    color: #ddd;
+    font-size: 12px;
+    padding: 4px 7px;
+    font-family: monospace;
+    min-width: 0;
+  }
+  .fn-row input[type=text]:focus {
+    outline: none;
+    border-color: #555;
+  }
+
+  .hint {
+    font-size: 10px;
+    color: #555;
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+
+  /* Sliders */
+  .slider-row {
+    margin: 6px 0;
+  }
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3px;
+  }
+  .slider-label span {
+    font-size: 12px;
+    color: #aaa;
+  }
+  .slider-label strong {
+    font-size: 13px;
+    color: #ddd;
+    font-family: monospace;
+    font-weight: 400;
+  }
+  input[type=range] {
+    width: 100%;
+    accent-color: #555;
+    cursor: pointer;
+  }
+
+  button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background: #3a3a3a;
+    border: 1px solid #4a4a4a;
+    border-radius: 5px;
+    color: #ddd;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  button:hover { background: #444; }
+  button:active { background: #333; }
+
+  #legend {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.8;
+    font-family: monospace;
+  }
+
+  #graph-wrap {
+    flex: 1;
+    position: relative;
+    min-width: 0;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: #111;
+  }
+
+  /* intercepts table */
+  #intercept-bar {
+    height: 140px;
+    background: #1e1e1e;
+    border-top: 1px solid #333;
+    overflow-y: auto;
+    padding: 8px 14px;
+    flex-shrink: 0;
+  }
+
+  #intercept-bar h4 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+
+  #intercept-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: monospace;
+  }
+  #intercept-table th {
+    text-align: left;
+    color: #666;
+    font-weight: 600;
+    font-size: 11px;
+    padding: 2px 10px 4px 0;
+    border-bottom: 1px solid #333;
+  }
+  #intercept-table td {
+    padding: 3px 10px 3px 0;
+    color: #ccc;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .no-intercepts { font-size: 12px; color: #555; font-style: italic; }
+
+  /* hide old html elements no longer needed */
+  #xlabel, #ylabel { display: none; }
+</style>
+</head>
+<body>
+
+<div id="main">
+  <div id="panel">
+
+    <h3>Engine 1</h3>
+    <div class="var-row"><label>Efficiency</label><input type="number" id="engine1Eff" value="1" step="0.01" /></div>
+    <div class="var-row"><label>Energy density (kWh/kg)</label><input type="number" id="engine1Kwhkg" value="0.25" step="0.01" /></div>
+    <div class="var-row"><label>Engine mass (kg)</label><input type="number" id="engine1mass" value="0.1" step="0.01" /></div>
+
+    <h3>Engine 2</h3>
+    <div class="var-row"><label>Efficiency</label><input type="number" id="engine2Eff" value="0.2" step="0.01" /></div>
+    <div class="var-row"><label>Energy density (kWh/kg)</label><input type="number" id="engine2Kwhkg" value="10" step="0.1" /></div>
+    <div class="var-row"><label>Engine mass (kg)</label><input type="number" id="engine2mass" value="2" step="0.1" /></div>
+
+    <h3>Mission</h3>
+    <div class="var-row"><label>Required energy (kWh)</label><input type="number" id="required_Kwh" value="1" step="0.1" /></div>
+
+    <h3>Functions</h3>
+    <div class="fn-row"><div class="fn-dot" style="background:#e24b4a"></div><input type="text" id="f1" value="(engine1Kwhkg*engine1Eff*x)/(x+engine1mass)" /></div>
+    <div class="fn-row"><div class="fn-dot" style="background:#378add"></div><input type="text" id="f2" value="(engine2Kwhkg*engine2Eff*x)/(x+engine2mass)" /></div>
+    <div class="fn-row"><div class="fn-dot" style="background:#1d9e75"></div><input type="text" id="f3" value="required_Kwh/x" /></div>
+    <div class="fn-row"><div class="fn-dot" style="background:#7f77dd"></div><input type="text" id="f4" placeholder="engine1mass" /></div>
+    <div class="fn-row"><div class="fn-dot" style="background:#d85a30"></div><input type="text" id="f5" placeholder="engine2mass" /></div>
+    <div class="hint">Use * for multiply: 50*x not 50x</div>
+
+    <h3>Axis Range (min = 0)</h3>
+    <div class="slider-row">
+      <div class="slider-label"><span>X max (kg)</span><strong id="xmax-val">10</strong></div>
+      <input type="range" id="xmax-slider" min="1" max="100" step="1" value="10" oninput="document.getElementById('xmax-val').textContent=this.value; drawGraph();" />
+    </div>
+    <div class="slider-row">
+      <div class="slider-label"><span>Y max (kWh/kg)</span><strong id="ymax-val">10</strong></div>
+      <input type="range" id="ymax-slider" min="1" max="100" step="1" value="10" oninput="document.getElementById('ymax-val').textContent=this.value; drawGraph();" />
+    </div>
+
+    <button onclick="drawGraph()">Graph</button>
+    <div id="legend"></div>
+  </div>
+
+  <div id="graph-wrap">
+    <canvas id="gc"></canvas>
+    <div id="xlabel"></div>
+    <div id="ylabel"></div>
+  </div>
+</div>
+
+<div id="intercept-bar">
+  <h4>Intersection Points</h4>
+  <div id="intercept-content"><span class="no-intercepts">Graph to compute intersections.</span></div>
+</div>
+
+<script>
+const canvas = document.getElementById("gc");
+const ctx = canvas.getContext("2d");
+const COLORS = ["#e24b4a","#378add","#1d9e75","#7f77dd","#d85a30"];
+
+function getVars() {
+  const ids = ["engine1Eff","engine1Kwhkg","engine1mass","engine2Eff","engine2Kwhkg","engine2mass","required_Kwh"];
+  const v = {};
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) v[id] = parseFloat(el.value) || 0;
+  });
+  return v;
+}
+
+function makeFunc(expr) {
+  try {
+    return new Function("x", "vars", `with(vars){ with(Math){ return (${expr}); } }`);
+  } catch(e) { return null; }
+}
+
+function niceStep(range, targetTicks) {
+  if (range <= 0 || !isFinite(range)) return 1;
+  const rough = range / targetTicks;
+  const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+  const norm = rough / mag;
+  const step = norm < 1.5 ? 1 : norm < 3.5 ? 2 : norm < 7.5 ? 5 : 10;
+  return step * mag;
+}
+
+function findIntersections(vals1, vals2, xMin, xRange, steps) {
+  const pts = [];
+  for (let i = 0; i < steps; i++) {
+    const y1a = vals1[i], y1b = vals1[i+1];
+    const y2a = vals2[i], y2b = vals2[i+1];
+    if (!isFinite(y1a)||!isFinite(y1b)||!isFinite(y2a)||!isFinite(y2b)) continue;
+    const d1 = y1a - y2a, d2 = y1b - y2b;
+    if (d1 * d2 < 0) {
+      const t = d1 / (d1 - d2);
+      const x = xMin + ((i + t) / steps) * xRange;
+      const y = y1a + t * (y1b - y1a);
+      pts.push({ x, y });
+    }
+  }
+  return pts;
+}
+
+function fmt(n) {
+  if (!isFinite(n)) return "—";
+  if (Math.abs(n) < 0.001 || Math.abs(n) >= 10000) return n.toExponential(3);
+  return parseFloat(n.toFixed(4)).toString();
+}
+
+function drawGraph() {
+  const w = canvas.width, h = canvas.height;
+  if (!w || !h) return;
+
+  const vars = getVars();
+  const exprs = [1,2,3,4,5].map(i => document.getElementById("f"+i).value.trim());
+  const funcs = exprs.map(e => e ? makeFunc(e) : null);
+
+  const xMin = 0;
+  const xMax = parseFloat(document.getElementById("xmax-slider").value) || 10;
+  const yMin = 0;
+  const yMax = parseFloat(document.getElementById("ymax-slider").value) || 10;
+  const xRange = xMax - xMin || 1;
+  const yRange = yMax - yMin || 1;
+
+  const pad = { top: 24, right: 24, bottom: 52, left: 72 };
+  const plotW = w - pad.left - pad.right;
+  const plotH = h - pad.top - pad.bottom;
+  const steps = Math.max(plotW, 600);
+
+  // Sample all functions
+  const samples = funcs.map(f => {
+    const arr = new Array(steps + 1);
+    if (!f) { arr.fill(NaN); return arr; }
+    for (let i = 0; i <= steps; i++) {
+      const x = xMin + (i / steps) * xRange;
+      try { arr[i] = f(x, vars); } catch { arr[i] = NaN; }
+      if (!isFinite(arr[i])) arr[i] = NaN;
+    }
+    return arr;
+  });
+
+  function toCanvasX(x) { return pad.left + ((x - xMin) / xRange) * plotW; }
+  function toCanvasY(y) { return pad.top + plotH - ((y - yMin) / yRange) * plotH; }
+
+  ctx.clearRect(0, 0, w, h);
+
+  const axisColor = "#666";
+  const gridColor = "rgba(255,255,255,0.05)";
+  const zeroColor = "rgba(255,255,255,0.15)";
+  const textColor = "#888";
+
+  const xStep = niceStep(xRange, 8);
+  const yStep = niceStep(yRange, 7);
+
+  // Grid
+  ctx.strokeStyle = gridColor; ctx.lineWidth = 1;
+  for (let x = Math.ceil(xMin/xStep)*xStep; x <= xMax+1e-9; x += xStep) {
+    const cx = toCanvasX(x); ctx.beginPath(); ctx.moveTo(cx, pad.top); ctx.lineTo(cx, pad.top+plotH); ctx.stroke();
+  }
+  for (let y = Math.ceil(yMin/yStep)*yStep; y <= yMax+1e-9; y += yStep) {
+    const cy = toCanvasY(y); ctx.beginPath(); ctx.moveTo(pad.left, cy); ctx.lineTo(pad.left+plotW, cy); ctx.stroke();
+  }
+
+  // Zero lines
+  if (xMin <= 0 && 0 <= xMax) {
+    ctx.strokeStyle = zeroColor; ctx.lineWidth = 1;
+    const cx = toCanvasX(0); ctx.beginPath(); ctx.moveTo(cx, pad.top); ctx.lineTo(cx, pad.top+plotH); ctx.stroke();
+  }
+  if (yMin <= 0 && 0 <= yMax) {
+    ctx.strokeStyle = zeroColor; ctx.lineWidth = 1;
+    const cy = toCanvasY(0); ctx.beginPath(); ctx.moveTo(pad.left, cy); ctx.lineTo(pad.left+plotW, cy); ctx.stroke();
+  }
+
+  // Axes
+  ctx.strokeStyle = axisColor; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(pad.left, pad.top); ctx.lineTo(pad.left, pad.top+plotH);
+  ctx.moveTo(pad.left, pad.top+plotH); ctx.lineTo(pad.left+plotW, pad.top+plotH);
+  ctx.stroke();
+
+  // Tick labels
+  ctx.fillStyle = textColor; ctx.font = "11px Arial, sans-serif";
+  ctx.textAlign = "center"; ctx.textBaseline = "top";
+  for (let x = Math.ceil(xMin/xStep)*xStep; x <= xMax+1e-9; x += xStep) {
+    ctx.fillText(parseFloat(x.toFixed(8)), toCanvasX(x), pad.top+plotH+6);
+  }
+  ctx.textAlign = "right"; ctx.textBaseline = "middle";
+  for (let y = Math.ceil(yMin/yStep)*yStep; y <= yMax+1e-9; y += yStep) {
+    ctx.fillText(parseFloat(y.toFixed(8)), pad.left-8, toCanvasY(y));
+  }
+
+  // Axis titles
+  ctx.fillStyle = "#999"; ctx.font = "12px Arial, sans-serif";
+  ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+  ctx.fillText("Fuel Mass (kg)", pad.left + plotW / 2, h - 6);
+  ctx.save();
+  ctx.translate(14, pad.top + plotH / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.textBaseline = "top";
+  ctx.fillText("Fundamental Density (kWh/kg)", 0, 0);
+  ctx.restore();
+
+  // Clip + draw curves
+  ctx.save();
+  ctx.beginPath(); ctx.rect(pad.left, pad.top, plotW, plotH); ctx.clip();
+
+  funcs.forEach((f, idx) => {
+    if (!f) return;
+    ctx.strokeStyle = COLORS[idx]; ctx.lineWidth = 2; ctx.lineJoin = "round";
+    ctx.beginPath();
+    let penDown = false;
+    const arr = samples[idx];
+    for (let i = 0; i <= steps; i++) {
+      const y = arr[i];
+      if (!isFinite(y)) { penDown = false; continue; }
+      const x = xMin + (i / steps) * xRange;
+      const cx = toCanvasX(x), cy = toCanvasY(y);
+      if (!penDown) { ctx.moveTo(cx, cy); penDown = true; }
+      else ctx.lineTo(cx, cy);
+    }
+    ctx.stroke();
+  });
+
+  // Intersection dots
+  const intersections = [];
+  for (let a = 0; a < 5; a++) {
+    for (let b = a+1; b < 5; b++) {
+      if (!funcs[a] || !funcs[b]) continue;
+      const pts = findIntersections(samples[a], samples[b], xMin, xRange, steps);
+      pts.forEach(pt => {
+        intersections.push({ a, b, x: pt.x, y: pt.y });
+        const cx = toCanvasX(pt.x), cy = toCanvasY(pt.y);
+        ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI*2);
+        ctx.fillStyle = "rgba(255,255,255,0.15)"; ctx.fill();
+        ctx.beginPath(); ctx.arc(cx, cy, 3.5, 0, Math.PI*2);
+        ctx.fillStyle = "#fff"; ctx.fill();
+      });
+    }
+  }
+
+  ctx.restore();
+
+  // Legend
+  document.getElementById("legend").innerHTML = exprs.map((e, i) =>
+    e ? `<span style="color:${COLORS[i]}">● f${i+1}: ${e}</span><br>` : ""
+  ).join("");
+
+  // Intersection table
+  const el = document.getElementById("intercept-content");
+  if (intersections.length === 0) {
+    el.innerHTML = '<span class="no-intercepts">No intersections found in current range.</span>';
+  } else {
+    let html = '<table id="intercept-table"><thead><tr>'
+      + '<th>Curves</th><th>Fuel Mass x (kg)</th><th>Fund. Density y (kWh/kg)</th>'
+      + '</tr></thead><tbody>';
+    intersections.forEach(({a, b, x, y}) => {
+      html += `<tr>
+        <td><span style="color:${COLORS[a]}">●f${a+1}</span> ∩ <span style="color:${COLORS[b]}">●f${b+1}</span></td>
+        <td>${fmt(x)}</td>
+        <td>${fmt(y)}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+}
+
+function resize() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  drawGraph();
+}
+
+window.addEventListener("resize", resize);
+resize();
+</script>
+</body>
+</html>
