@@ -36,7 +36,7 @@
     },
     {
         "name": "1 dc motor control",
-        "file": "logo.obj",
+        "file": "dc_motor_control.obj",
         "site": "./blog/1 DC motor control.html"
     },
     {
@@ -66,7 +66,7 @@
     },
     {
         "name": "7 spray assist",
-        "file": "logo.obj",
+        "file": "sprayassist.obj",
         "site": "./blog/7 Spray assist.html"
     },
     {
@@ -81,7 +81,7 @@
     },
     {
         "name": "10 mini lightbox",
-        "file": "logo.obj",
+        "file": "lightbox.obj",
         "site": "./blog/10 Mini lightbox.html"
     },
     {
@@ -96,12 +96,12 @@
     },
     {
         "name": "13 bike bag",
-        "file": "logo.obj",
+        "file": "bikebag.obj",
         "site": "./blog/13 bike bag.html"
     },
     {
         "name": "14 3d printed screw driver",
-        "file": "logo.obj",
+        "file": "screwdriver.obj",
         "site": "./blog/14 3D Printed Screw Driver.html"
     },
     {
@@ -141,7 +141,7 @@
     },
     {
         "name": "22 tpu gearbelt",
-        "file": "logo.obj",
+        "file": "tpu_belt.obj",
         "site": "./blog/22 tpu gearbelt.html"
     },
     {
@@ -166,7 +166,7 @@
     },
     {
         "name": "27 spray logo",
-        "file": "logo.obj",
+        "file": "spraylogo.obj",
         "site": "./blog/27 Spray logo.html"
     },
     {
@@ -231,7 +231,7 @@
     },
     {
         "name": "40 can crusher",
-        "file": "logo.obj",
+        "file": "cancrusher.obj",
         "site": "./blog/40 Can crusher.html"
     },
     {
@@ -251,7 +251,7 @@
     },
     {
         "name": "44 ris",
-        "file": "logo.obj",
+        "file": "RIS.obj",
         "site": "./blog/44 RIS.html"
     },
     {
@@ -266,7 +266,7 @@
     },
     {
         "name": "47 aquaphyto",
-        "file": "logo.obj",
+        "file": "aquaphyto.obj",
         "site": "./blog/47 AquaPhyto.html"
     },
     {
