@@ -59,6 +59,82 @@
     </nav>
 </section>
 
+<section data-bs-version="5.1" class="content4" id="content4-pdf-list" style="background-color:#232323;padding-top:10rem;padding-bottom:5rem;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="title col-md-12 col-lg-9">
+                <h3 class="mbr-section-title mbr-fonts-style align-center mb-4 display-2" style="color:#ffffff;"><strong>Downloadable PDFs</strong></h3>
+                <h4 class="mbr-section-subtitle align-center mbr-fonts-style mb-4 display-5" style="color:#ffffff;">Click a title below to download the PDF</h4>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-9">
+                <ul id="pdf-list-ul" style="list-style:none;padding:0;margin:0;text-align:center;">
+                    <li class="mbr-fonts-style display-7" style="color:#ffffff;">Loading PDFs&hellip;</li>
+                </ul>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-9">
+                <h4 class="mbr-section-subtitle align-center mbr-fonts-style mt-4 display-5" style="color:#ffffff;">If you want to see legacy papers, keep scrolling</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+    // Folder (relative to this page) where the PDFs and manifest.json live.
+    var pdfDir = "pdfs/";
+    var manifestUrl = pdfDir + "manifest.json";
+
+    var listEl = document.getElementById("pdf-list-ul");
+
+    fetch(manifestUrl, { cache: "no-store" })
+        .then(function (res) {
+            if (!res.ok) {
+                throw new Error("Could not load " + manifestUrl + " (" + res.status + ")");
+            }
+            return res.json();
+        })
+        .then(function (files) {
+            var pdfs = (files || []).filter(function (name) {
+                return /\.pdf$/i.test(name);
+            });
+
+            listEl.innerHTML = "";
+
+            if (pdfs.length === 0) {
+                listEl.innerHTML = '<li class="mbr-fonts-style display-7" style="color:#ffffff;">No PDFs listed yet.</li>';
+                return;
+            }
+
+            pdfs.sort(function (a, b) { return a.localeCompare(b); });
+
+            pdfs.forEach(function (name) {
+                var li = document.createElement("li");
+                li.style.margin = "0.6rem 0";
+
+                var a = document.createElement("a");
+                a.href = pdfDir + encodeURIComponent(name);
+                a.download = name;
+                a.textContent = name.replace(/\.pdf$/i, "");
+                a.className = "mbr-fonts-style display-5";
+                a.style.textDecoration = "underline";
+                a.style.color = "#ffffff";
+                a.style.fontWeight = "bold";
+
+                li.appendChild(a);
+                listEl.appendChild(li);
+            });
+        })
+        .catch(function (err) {
+            listEl.innerHTML = '<li class="mbr-fonts-style display-7" style="color:#ffffff;">Couldn\'t load the PDF list right now.</li>';
+            console.error("PDF list error:", err);
+        });
+})();
+</script>
+
 <section data-bs-version="5.1" class="content4 cid-u4SanJ9x2g" id="content4-7z">
     
 

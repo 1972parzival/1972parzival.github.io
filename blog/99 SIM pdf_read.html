@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOX·READER — PDF to Speech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0a0a;
+    --bg-alt: #111111;
+    --panel: #1a1a1a;
+    --panel-alt: #222222;
+    --line: #333333;
+    --text: #f0f0f0;
+    --text-dim: #888888;
+    --accent: #ff0000;
+    --accent-dim: #660000;
+    --highlight: #ff4444;
+    --font-mono: 'Space Mono', monospace;
+    --font-sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 18px;
+    gap: 16px;
+  }
+  /* Header */
+  header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .brand .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    display: inline-block;
+    transform: translateY(-2px);
+  }
+  .brand h1 {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    letter-spacing: 0.12em;
+    margin: 0;
+    font-weight: 700;
+  }
+  .brand h1 span { color: var(--accent); }
+  header .sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+  /* Main grid */
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(300px, 38%) 1fr;
+    gap: 16px;
+    min-height: 0;
+  }
+  .left-col {
+    display: grid;
+    grid-template-rows: minmax(160px, 32%) 1fr;
+    gap: 16px;
+    min-height: 0;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .panel-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+    padding: 10px 14px 0 14px;
+    flex-shrink: 0;
+  }
+  /* Upload panel */
+  #dropZone {
+    flex: 1;
+    margin: 10px 14px 14px 14px;
+    border: 1.5px dashed var(--line);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+    text-align: center;
+    padding: 10px;
+  }
+  #dropZone:hover, #dropZone.drag {
+    border-color: var(--highlight);
+    background: rgba(255,68,68,0.04);
+  }
+  #dropZone svg { opacity: 0.6; }
+  #dropZone .hint { font-size: 12.5px; color: var(--text-dim); }
+  #dropZone .hint b { color: var(--text); font-weight: 500; }
+  #fileInfo {
+    display: none;
+    flex: 1;
+    margin: 10px 14px 14px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+  #fileInfo .name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    word-break: break-all;
+  }
+  #fileInfo .meta {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  #fileInfo .swap {
+    align-self: flex-start;
+    margin-top: 8px;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--highlight);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #fileInfo .swap:hover { border-color: var(--highlight); }
+  /* Player panel */
+  #playerPanel { padding-bottom: 14px; }
+  .vfd-wrap {
+    margin: 12px 14px 6px 14px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px 16px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .vfd-wrap::before{
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      to bottom, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px,
+      transparent 1px, transparent 3px
+    );
+    pointer-events: none;
+  }
+  #wordDisplay {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(18px, 3.5vw, 32px);
+    color: var(--accent);
+    text-shadow: 0 0 12px var(--accent-dim), 0 0 2px var(--accent);
+    text-align: center;
+    letter-spacing: 0.03em;
+    min-height: 60px;
+    max-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: break-word;
+    overflow: hidden;
+    line-height: 1.1;
+    transition: opacity .05s ease, font-size .1s ease;
+  }
+  #wordDisplay.idle { 
+    color: var(--text-dim); 
+    text-shadow: none; 
+    font-size: 15px; 
+    font-weight: 400; 
+  }
+  .vfd-status {
+    position: relative;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    margin-top: 10px;
+  }
+  .vfd-status .page-num { color: var(--highlight); }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 14px 0 14px;
+    flex-shrink: 0;
+  }
+  .ctrl-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--panel-alt);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color .15s ease, transform .1s ease;
+  }
+  .ctrl-btn:hover:not(:disabled) { border-color: var(--accent); }
+  .ctrl-btn:active:not(:disabled) { transform: scale(0.94); }
+  .ctrl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  #playBtn {
+    width: 52px; height: 52px;
+    background: var(--accent);
+    border: none;
+    color: #0a0a0a;
+  }
+  #playBtn:hover:not(:disabled) { background: #ff4444; }
+  #playBtn svg { fill: #0a0a0a; }
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--highlight);
+    transition: width .2s linear;
+  }
+  .settings {
+    margin: 16px 14px 0 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .setting-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .setting-row label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+  }
+  select, input[type=range] {
+    accent-color: var(--highlight);
+  }
+  select {
+    background: var(--panel-alt);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 7px 8px;
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+  }
+  #voiceNote {
+    font-size: 10.5px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin: 4px 14px 0 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  #voiceNote b { color: var(--highlight); font-weight: 500; }
+  /* PDF viewer panel */
+  #viewerPanel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .viewer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px 0 14px;
+    flex-shrink: 0;
+  }
+  #pageIndicator {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--highlight);
+    letter-spacing: 0.06em;
+  }
+  .viewer-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    overflow: auto;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/16px 16px;
+  }
+  #pdfCanvasWrap {
+    background: #f4f1ea;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+    line-height: 0;
+    display: none;
+    max-width: 100%;
+    max-height: 100%;
+  }
+  #pdfCanvas { display: block; max-width: 100%; height: auto; }
+  .viewer-empty {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 1.8;
+  }
+  .viewer-empty .big { font-size: 34px; display:block; margin-bottom: 6px; opacity: 0.5;}
+  @media (max-width: 820px) {
+    .grid { grid-template-columns: 1fr; grid-template-rows: auto auto; }
+    .left-col { grid-template-rows: auto auto; }
+    #viewerPanel { min-height: 320px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOX·READER — PDF to Speech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0a0a;
+    --bg-alt: #111111;
+    --panel: #1a1a1a;
+    --panel-alt: #222222;
+    --line: #333333;
+    --text: #f0f0f0;
+    --text-dim: #888888;
+    
+    --accent: #ff0000;
+    --accent-dim: #660000;
+    --highlight: #ff4444;
+    --font-mono: 'Space Mono', monospace;
+    --font-sans: 'IBM Plex Sans', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  }
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 18px;
+    gap: 16px;
+  }
+  /* Header */
+  header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .brand .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    display: inline-block;
+    transform: translateY(-2px);
+  }
+  .brand h1 {
+    font-family: var(--font-mono);
+    font-size: 20px;
+    letter-spacing: 0.12em;
+    margin: 0;
+    font-weight: 700;
+  }
+  .brand h1 span { color: var(--accent); }
+  header .sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+  /* Main grid */
+  .grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: minmax(300px, 38%) 1fr;
+    gap: 16px;
+    min-height: 0;
+  }
+  .left-col {
+    display: grid;
+    grid-template-rows: minmax(160px, 32%) 1fr;
+    gap: 16px;
+    min-height: 0;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .panel-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+    padding: 10px 14px 0 14px;
+    flex-shrink: 0;
+  }
+  /* Upload panel */
+  #dropZone {
+    flex: 1;
+    margin: 10px 14px 14px 14px;
+    border: 1.5px dashed var(--line);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+    text-align: center;
+    padding: 10px;
+  }
+  #dropZone:hover, #dropZone.drag {
+    border-color: var(--highlight);
+    background: rgba(255,68,68,0.04);
+  }
+  #dropZone svg { opacity: 0.6; }
+  #dropZone .hint { font-size: 12.5px; color: var(--text-dim); }
+  #dropZone .hint b { color: var(--text); font-weight: 500; }
+  #fileInfo {
+    display: none;
+    flex: 1;
+    margin: 10px 14px 14px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+  #fileInfo .name {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    word-break: break-all;
+  }
+  #fileInfo .meta {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  #fileInfo .swap {
+    align-self: flex-start;
+    margin-top: 8px;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--highlight);
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.06em;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #fileInfo .swap:hover { border-color: var(--highlight); }
+  /* Player panel */
+  #playerPanel { padding-bottom: 14px; }
+  .vfd-wrap {
+    margin: 12px 14px 6px 14px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px 16px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .vfd-wrap::before{
+    content: "";
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      to bottom, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px,
+      transparent 1px, transparent 3px
+    );
+    pointer-events: none;
+  }
+  #wordDisplay {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: clamp(18px, 3.5vw, 32px);
+    color: var(--accent);
+    text-shadow: 0 0 12px var(--accent-dim), 0 0 2px var(--accent);
+    text-align: center;
+    letter-spacing: 0.03em;
+    min-height: 60px;
+    max-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: break-word;
+    overflow: hidden;
+    line-height: 1.1;
+    transition: opacity .05s ease, font-size .1s ease;
+  }
+  #wordDisplay.idle { 
+    color: var(--text-dim); 
+    text-shadow: none; 
+    font-size: 15px; 
+    font-weight: 400; 
+  }
+  .vfd-status {
+    position: relative;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    margin-top: 10px;
+  }
+  .vfd-status .page-num { color: var(--highlight); }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 14px 0 14px;
+    flex-shrink: 0;
+  }
+  .ctrl-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--panel-alt);
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color .15s ease, transform .1s ease;
+  }
+  .ctrl-btn:hover:not(:disabled) { border-color: var(--accent); }
+  .ctrl-btn:active:not(:disabled) { transform: scale(0.94); }
+  .ctrl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  #playBtn {
+    width: 52px; height: 52px;
+    background: var(--accent);
+    border: none;
+    color: #0a0a0a;
+  }
+  #playBtn:hover:not(:disabled) { background: #ff4444; }
+  #playBtn svg { fill: #0a0a0a; }
+  .progress-track {
+    flex: 1;
+    height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--highlight);
+    transition: width .2s linear;
+  }
+  .settings {
+    margin: 16px 14px 0 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .setting-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .setting-row label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    display: flex;
+    justify-content: space-between;
+  }
+  select, input[type=range] {
+    accent-color: var(--highlight);
+  }
+  select {
+    background: var(--panel-alt);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 7px 8px;
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+  }
+  #voiceNote {
+    font-size: 10.5px;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin: 4px 14px 0 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    flex-shrink: 0;
+  }
+  #voiceNote b { color: var(--highlight); font-weight: 500; }
+  /* PDF viewer panel */
+  #viewerPanel {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .viewer-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px 0 14px;
+    flex-shrink: 0;
+  }
+  #pageIndicator {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--highlight);
+    letter-spacing: 0.06em;
+  }
+  .viewer-body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+    overflow: auto;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.035) 1px, transparent 0) 0 0/16px 16px;
+  }
+  #pdfCanvasWrap {
+    background: #f4f1ea;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.45);
+    line-height: 0;
+    display: none;
+    max-width: 100%;
+    max-height: 100%;
+  }
+  #pdfCanvas { display: block; max-width: 100%; height: auto; }
+  .viewer-empty {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 1.8;
+  }
+  .viewer-empty .big { font-size: 34px; display:block; margin-bottom: 6px; opacity: 0.5;}
+  @media (max-width: 820px) {
+    .grid { grid-template-columns: 1fr; grid-template-rows: auto auto; }
+    .left-col { grid-template-rows: auto auto; }
+    #viewerPanel { min-height: 320px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <span class="dot"></span>
+      <h1>RESEARCH<span>·</span>READER</h1>
+    </div>
+    <div class="sub">PDF → SPEECH · WORD-SYNC DISPLAY</div>
+  </header>
+  <div class="grid">
+    <div class="left-col">
+      <!-- Upload panel -->
+      <div class="panel">
+        <div class="panel-label">01 · SOURCE DOCUMENT</div>
+        <div id="dropZone">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#888888" stroke-width="1.4">
+            <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/>
+          </svg>
+          <div class="hint"><b>Click to upload</b> or drop a PDF here</div>
+        </div>
+        <div id="fileInfo">
+          <div class="name" id="fileName">—</div>
+          <div class="meta" id="fileMeta">—</div>
+          <button class="swap" id="swapBtn">CHOOSE A DIFFERENT FILE</button>
+        </div>
+        <input type="file" id="fileInput" accept="application/pdf" style="display:none">
+      </div>
+      <!-- Player panel -->
+      <div class="panel" id="playerPanel">
+        <div class="panel-label">02 · LIVE TRANSCRIPT</div>
+        <div class="vfd-wrap">
+          <div id="wordDisplay" class="idle">— UPLOAD A PDF TO BEGIN —</div>
+          <div class="vfd-status">
+            PAGE <span class="page-num" id="pageNumLabel">0</span> / <span id="pageTotalLabel">0</span>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="ctrl-btn" id="stopBtn" title="Stop and reset" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="#f0f0f0"><rect x="5" y="5" width="14" height="14" rx="1.5"/></svg>
+          </button>
+          <button id="playBtn" class="ctrl-btn" title="Play" disabled>
+            <svg id="playIcon" width="18" height="18" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pauseIcon" width="18" height="18" viewBox="0 0 24 24" style="display:none"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+          </button>
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        <div class="settings">
+          <div class="setting-row">
+            <label>VOICE <span id="voiceEngineTag">—</span></label>
+            <select id="voiceSelect"></select>
+          </div>
+          <div class="setting-row">
+            <label>RATE <span id="rateVal">1.0×</span></label>
+            <input type="range" id="rateSlider" min="0.5" max="2" step="0.1" value="1">
+          </div>
+        </div>
+        <div id="voiceNote">
+          <b>Note:</b> browsers no longer ship the original Microsoft Sam voice (retired after Windows XP).
+          This reader auto-selects a Sam-like voice if your system exposes one, otherwise it falls back to
+          the closest available system voice — pick a different one above any time.
+        </div>
+      </div>
+    </div>
+    <!-- PDF viewer -->
+    <div class="panel" id="viewerPanel">
+      <div class="viewer-head">
+        <div class="panel-label" style="padding:0;">03 · DOCUMENT VIEW</div>
+        <div id="pageIndicator"></div>
+      </div>
+      <div class="viewer-body" id="viewerBody">
+        <div class="viewer-empty" id="viewerEmpty">
+          <span class="big">▯</span>
+          The page being read aloud<br>will appear here
+        </div>
+        <div id="pdfCanvasWrap"><canvas id="pdfCanvas"></canvas></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+// ---------- Elements ----------
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileInfo = document.getElementById('fileInfo');
+const fileName = document.getElementById('fileName');
+const fileMeta = document.getElementById('fileMeta');
+const swapBtn = document.getElementById('swapBtn');
+const wordDisplay = document.getElementById('wordDisplay');
+const pageNumLabel = document.getElementById('pageNumLabel');
+const pageTotalLabel = document.getElementById('pageTotalLabel');
+const pageIndicator = document.getElementById('pageIndicator');
+const playBtn = document.getElementById('playBtn');
+const stopBtn = document.getElementById('stopBtn');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const progressFill = document.getElementById('progressFill');
+const voiceSelect = document.getElementById('voiceSelect');
+const voiceEngineTag = document.getElementById('voiceEngineTag');
+const rateSlider = document.getElementById('rateSlider');
+const rateVal = document.getElementById('rateVal');
+const viewerEmpty = document.getElementById('viewerEmpty');
+const pdfCanvasWrap = document.getElementById('pdfCanvasWrap');
+const pdfCanvas = document.getElementById('pdfCanvas');
+const ctx = pdfCanvas.getContext('2d');
+
+// ---------- State ----------
+let pdfDoc = null;
+let numPages = 0;
+let pageTexts = []; 
+let currentPageNum = 1;
+let playState = 'stopped'; 
+let currentUtterance = null;
+let voices = [];
+let renderTaskToken = 0;
+
+// ---------- Voice setup ----------
+function loadVoices() {
+  voices = speechSynthesis.getVoices();
+  if (!voices.length) return;
+  voiceSelect.innerHTML = '';
+  voices.forEach((v, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${v.name} (${v.lang})`;
+    voiceSelect.appendChild(opt);
+  });
+  const samIdx = voices.findIndex(v => /sam/i.test(v.name));
+  if (samIdx >= 0) {
+    voiceSelect.value = samIdx;
+    voiceEngineTag.textContent = 'SAM FOUND';
+  } else {
+    const enIdx = voices.findIndex(v => /en-|english/i.test(v.lang + v.name));
+    voiceSelect.value = enIdx >= 0 ? enIdx : 0;
+    voiceEngineTag.textContent = 'FALLBACK';
+  }
+}
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
+
+rateSlider.addEventListener('input', () => {
+  rateVal.textContent = parseFloat(rateSlider.value).toFixed(1) + '×';
+});
+
+// ---------- File handling ----------
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
+swapBtn.addEventListener('click', () => fileInput.click());
+
+async function handleFile(file) {
+  if (file.type !== 'application/pdf') { alert('Please upload a PDF file.'); return; }
+  resetPlayback();
+  fileName.textContent = file.name;
+  fileMeta.textContent = 'Reading document…';
+  fileInfo.style.display = 'flex';
+  dropZone.style.display = 'none';
+  const buf = await file.arrayBuffer();
+  pdfDoc = await pdfjsLib.getDocument({ data: buf }).promise;
+  numPages = pdfDoc.numPages;
+  pageTexts = [];
+  for (let p = 1; p <= numPages; p++) {
+    const page = await pdfDoc.getPage(p);
+    const content = await page.getTextContent();
+    const text = content.items.map(it => it.str).join(' ').replace(/\s+/g, ' ').trim();
+    pageTexts.push(text);
+  }
+  fileMeta.textContent = `${numPages} page${numPages === 1 ? '' : 's'} · ready`;
+  pageTotalLabel.textContent = numPages;
+  currentPageNum = 1;
+  pageNumLabel.textContent = 1;
+  updatePageIndicator();
+  await renderPage(1);
+  playBtn.disabled = false;
+  stopBtn.disabled = false;
+  wordDisplay.classList.add('idle');
+  wordDisplay.textContent = 'READY — PRESS PLAY';
+}
+
+// ---------- PDF rendering ----------
+async function renderPage(n) {
+  if (!pdfDoc) return;
+  const myToken = ++renderTaskToken;
+  const page = await pdfDoc.getPage(n);
+  const viewport = page.getViewport({ scale: 1.6 });
+  pdfCanvas.width = viewport.width;
+  pdfCanvas.height = viewport.height;
+  if (myToken !== renderTaskToken) return;
+  await page.render({ canvasContext: ctx, viewport }).promise;
+  viewerEmpty.style.display = 'none';
+  pdfCanvasWrap.style.display = 'block';
+  updatePageIndicator();
+}
+
+function updatePageIndicator() {
+  pageIndicator.textContent = numPages ? `PAGE ${currentPageNum} / ${numPages}` : '';
+  pageNumLabel.textContent = currentPageNum;
+  progressFill.style.width = numPages ? `${((currentPageNum - 1) / numPages) * 100}%` : '0%';
+}
+
+// ---------- Improved Word-level speech ----------
+function getCurrentWord(text, charIndex) {
+  if (charIndex < 0 || charIndex >= text.length) return '';
+  let start = charIndex;
+  while (start > 0 && !/\s/.test(text[start - 1])) start--;
+  let end = charIndex;
+  while (end < text.length && !/\s/.test(text[end])) end++;
+  let word = text.slice(start, end).trim();
+  if (!word) {
+    const words = text.split(/\s+/);
+    const approxIdx = Math.floor(charIndex / (text.length / words.length || 1));
+    word = words[Math.min(approxIdx, words.length - 1)] || '';
+  }
+  return word;
+}
+
+function speakPage(n) {
+  if (playState !== 'playing') return;
+  if (n > numPages) { finishReading(); return; }
+  currentPageNum = n;
+  updatePageIndicator();
+  renderPage(n);
+  const text = pageTexts[n - 1] || '';
+  if (!text) { speakPage(n + 1); return; }
+  const utter = new SpeechSynthesisUtterance(text);
+  const vIdx = parseInt(voiceSelect.value);
+  if (voices[vIdx]) utter.voice = voices[vIdx];
+  utter.rate = parseFloat(rateSlider.value);
+  utter.pitch = 1.0;
+  
+  let lastWord = '';
+  utter.onboundary = (e) => {
+    if (e.name === 'word' && e.charIndex !== undefined) {
+      const w = getCurrentWord(text, e.charIndex);
+      if (w && w !== lastWord) {
+        lastWord = w;
+        wordDisplay.classList.remove('idle');
+        wordDisplay.textContent = w.toUpperCase();
+        void wordDisplay.offsetWidth;
+      }
+    }
+  };
+  utter.onend = () => {
+    if (playState === 'playing') speakPage(n + 1);
+  };
+  utter.onerror = (e) => {
+    console.warn('Speech error:', e);
+    if (playState === 'playing') speakPage(n + 1);
+  };
+  currentUtterance = utter;
+  speechSynthesis.speak(utter);
+}
+
+function finishReading() {
+  playState = 'stopped';
+  setPlayIcon();
+  wordDisplay.classList.add('idle');
+  wordDisplay.textContent = '— END OF DOCUMENT —';
+  progressFill.style.width = '100%';
+}
+
+function setPlayIcon() {
+  const playing = playState === 'playing';
+  playIcon.style.display = playing ? 'none' : 'block';
+  pauseIcon.style.display = playing ? 'block' : 'none';
+  playBtn.title = playing ? 'Pause' : 'Play';
+}
+
+function resetPlayback() {
+  speechSynthesis.cancel();
+  playState = 'stopped';
+  currentPageNum = 1;
+  setPlayIcon();
+  progressFill.style.width = '0%';
+  wordDisplay.classList.add('idle');
+  wordDisplay.textContent = '— UPLOAD A PDF TO BEGIN —';
+}
+
+// ---------- Controls ----------
+playBtn.addEventListener('click', () => {
+  if (!pdfDoc) return;
+  if (playState === 'paused') {
+    speechSynthesis.resume();
+    playState = 'playing';
+    setPlayIcon();
+    return;
+  }
+  if (playState === 'playing') {
+    speechSynthesis.pause();
+    playState = 'paused';
+    setPlayIcon();
+    return;
+  }
+  speechSynthesis.cancel();
+  playState = 'playing';
+  setPlayIcon();
+  speakPage(currentPageNum || 1);
+});
+
+stopBtn.addEventListener('click', () => {
+  resetPlayback();
+  if (pdfDoc) renderPage(1);
+  wordDisplay.classList.add('idle');
+  wordDisplay.textContent = 'READY — PRESS PLAY';
+});
+
+window.addEventListener('beforeunload', () => speechSynthesis.cancel());
+</script>
+</body>
+</html>

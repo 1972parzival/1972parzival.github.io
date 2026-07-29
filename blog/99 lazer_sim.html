@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAYBENCH — Optical Bench Simulator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #0a0d12;
+    --panel: #11151d;
+    --panel2: #161c26;
+    --hair: #232a37;
+    --hair-strong: #313b4c;
+    --text: #d7dce4;
+    --text-dim: #7c8797;
+    --text-faint: #4c5563;
+    --amber: #ffb020;
+    --cyan: #39e0ff;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'Inter', sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  html,body{
+    margin:0; padding:0; height:100%; background: var(--bg); color: var(--text);
+    font-family: var(--sans); overflow: hidden;
+  }
+  #app{ display:flex; width:100vw; height:100vh; }
+
+  #viewport{ position: relative; flex: 1 1 auto; min-width: 0; }
+  #viewport canvas{ display:block; width:100%; height:100%; }
+
+  #topbar{
+    position:absolute; top:0; left:0; right:0; padding: 14px 20px;
+    display:flex; align-items:baseline; justify-content:space-between;
+    pointer-events:none; z-index: 5;
+  }
+  #topbar .title{
+    font-family: var(--mono); font-size: 13px; letter-spacing: 2px; color: var(--text-dim);
+    text-transform: uppercase;
+  }
+  #topbar .title b{ color: var(--amber); font-weight:600; }
+  #topbar .readout{
+    font-family: var(--mono); font-size: 11px; color: var(--text-faint); text-align:right; line-height:1.6;
+  }
+  #topbar .readout span{ color: var(--cyan); }
+
+  #hint{
+    position:absolute; bottom: 14px; left: 20px; font-family: var(--mono); font-size: 10.5px;
+    color: var(--text-faint); letter-spacing: 0.5px; z-index:5; pointer-events:none;
+  }
+
+  #panel{
+    width: 340px; flex: 0 0 340px; background: var(--panel);
+    border-left: 1px solid var(--hair); display:flex; flex-direction: column;
+    height:100vh;
+  }
+  #panel-head{
+    padding: 18px 18px 14px; border-bottom: 1px solid var(--hair);
+  }
+  #panel-head h1{
+    font-family: var(--mono); font-size: 15px; letter-spacing: 1.5px; margin:0 0 3px;
+    color: var(--text); font-weight:600;
+  }
+  #panel-head h1 b{ color: var(--amber); }
+  #panel-head p{ margin:0; font-size: 11.5px; color: var(--text-dim); line-height:1.5; }
+
+  #panel-body{ flex:1 1 auto; overflow-y: auto; padding: 14px 16px 90px; }
+  #panel-body::-webkit-scrollbar{ width: 8px; }
+  #panel-body::-webkit-scrollbar-thumb{ background: var(--hair-strong); border-radius: 4px; }
+  #panel-body::-webkit-scrollbar-track{ background: transparent; }
+
+  .section-label{
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.5px; color: var(--text-faint);
+    text-transform: uppercase; margin: 18px 0 8px; display:flex; justify-content:space-between; align-items:center;
+  }
+  .section-label:first-child{ margin-top:0; }
+
+  .addbtn{
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.5px; background: transparent;
+    border: 1px solid var(--hair-strong); color: var(--text-dim); padding: 4px 9px; border-radius: 4px;
+    cursor: pointer; transition: all .12s;
+  }
+  .addbtn:hover{ border-color: var(--amber); color: var(--amber); }
+
+  .card{
+    background: var(--panel2); border: 1px solid var(--hair); border-radius: 6px;
+    margin-bottom: 10px; overflow:hidden; transition: border-color .15s;
+  }
+  .card.selected{ border-color: var(--card-accent, var(--amber)); }
+  .card-head{
+    display:flex; align-items:center; gap:8px; padding: 9px 10px; cursor:pointer;
+    user-select:none;
+  }
+  .swatch{ width:10px; height:10px; border-radius:50%; flex:0 0 auto; box-shadow: 0 0 6px 1px var(--sw-color, transparent); }
+  .card-head .name{
+    font-family: var(--mono); font-size: 12px; color: var(--text); flex:1 1 auto;
+  }
+  .card-head .bounces{ font-family: var(--mono); font-size: 10px; color: var(--text-faint); }
+  .card-head .del{
+    background:none; border:none; color: var(--text-faint); cursor:pointer; font-size: 14px;
+    line-height:1; padding: 2px 4px; border-radius:3px;
+  }
+  .card-head .del:hover{ color: #ff5c5c; background: rgba(255,92,92,0.1); }
+  .card-head .chev{ color: var(--text-faint); font-size: 10px; transition: transform .15s; }
+  .card.open .chev{ transform: rotate(90deg); }
+
+  .card-body{ display:none; padding: 4px 12px 12px; }
+  .card.open .card-body{ display:block; }
+
+  .row{ display:flex; align-items:center; gap:8px; margin: 7px 0; }
+  .row label{
+    font-family: var(--mono); font-size: 10px; color: var(--text-faint); width: 34px; flex: 0 0 auto;
+    text-transform: uppercase;
+  }
+  .row input[type=range]{
+    flex:1 1 auto; -webkit-appearance:none; height: 3px; background: var(--hair-strong);
+    border-radius: 2px; outline:none;
+  }
+  .row input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width: 12px; height:12px; border-radius:50%;
+    background: var(--thumb-color, var(--amber)); cursor:pointer; border: 2px solid var(--panel2);
+  }
+  .row .val{
+    font-family: var(--mono); font-size: 10.5px; color: var(--text-dim); width: 40px; text-align:right; flex:0 0 auto;
+  }
+  .row input[type=color]{
+    -webkit-appearance:none; width: 22px; height:22px; border:none; background:none; padding:0; cursor:pointer;
+  }
+  .row input[type=color]::-webkit-color-swatch-wrapper{ padding:0; }
+  .row input[type=color]::-webkit-color-swatch{ border-radius:4px; border: 1px solid var(--hair-strong); }
+
+  .empty{
+    font-family: var(--mono); font-size: 11px; color: var(--text-faint); text-align:center;
+    padding: 18px 10px; border: 1px dashed var(--hair-strong); border-radius: 6px;
+  }
+
+  #global{
+    border-top: 1px solid var(--hair); padding: 12px 16px 16px; background: var(--panel);
+  }
+  #global .row label{ width: 70px; }
+  #global .row .val{ width: 26px; }
+  .toggles{ display:flex; gap:8px; margin-top:8px; }
+  .toggles button{
+    flex:1; font-family: var(--mono); font-size: 10.5px; background: var(--panel2);
+    border: 1px solid var(--hair); color: var(--text-dim); padding: 7px 4px; border-radius:5px;
+    cursor:pointer; transition: all .12s;
+  }
+  .toggles button:hover{ border-color: var(--hair-strong); color: var(--text); }
+  .toggles button.on{ border-color: var(--cyan); color: var(--cyan); }
+
+  ::selection{ background: var(--amber); color: #1a1200; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="viewport">
+    <canvas id="c"></canvas>
+    <div id="topbar">
+      <div class="title">RAYBENCH <b>/</b> optical simulator</div>
+      <div class="readout" id="readout">lasers <span id="rLasers">0</span> · mirrors <span id="rMirrors">0</span> · bounces/frame <span id="rBounces">0</span></div>
+    </div>
+    <div id="hint">drag to orbit · scroll to zoom · shift+drag to pan</div>
+  </div>
+  <div id="panel">
+    <div id="panel-head">
+      <h1>RAY<b>BENCH</b></h1>
+      <p>Place lasers and mirrors on the bench, then dial in position and angle. Beams retrace live as light would.</p>
+    </div>
+    <div id="panel-body">
+      <div class="section-label">Lasers <button class="addbtn" id="addLaser">+ add</button></div>
+      <div id="laserList"></div>
+
+      <div class="section-label">Mirrors <button class="addbtn" id="addMirror">+ add</button></div>
+      <div id="mirrorList"></div>
+    </div>
+    <div id="global">
+      <div class="row">
+        <label>bounces</label>
+        <input type="range" id="maxBounces" min="1" max="20" step="1" value="8">
+        <span class="val" id="maxBouncesVal">8</span>
+      </div>
+      <div class="toggles">
+        <button id="toggleGrid" class="on">table grid</button>
+        <button id="toggleGhost">bounds</button>
+        <button id="resetCam">reset view</button>
+      </div>
+      <div class="toggles" style="margin-top:8px;">
+        <button id="toggle2D">2d top-down</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+
+var THREE_R = THREE;
+var ROOM = { x: 9, yMin: 0, yMax: 11, z: 9 };
+
+var scene, camera, perspCamera, orthoCamera, renderer, clock;
+var mirrorMeshes = [];
+var laserObjs = {};
+var mirrorObjs = {};
+var beamGroups = {};
+var nextId = 1;
+
+var state = {
+  maxBounces: 8,
+  lasers: [],
+  mirrors: [],
+  selected: null,
+  showGrid: true,
+  showBounds: false,
+  mode2D: false
+};
+
+function uid(prefix){ return prefix + (nextId++); }
+
+function defaultLaser(overrides){
+  return Object.assign({
+    id: uid('L'), type:'laser',
+    x: -7, y: 4, z: -7, yaw: 40, pitch: 0,
+    color: '#ff2d55'
+  }, overrides);
+}
+function defaultMirror(overrides){
+  return Object.assign({
+    id: uid('M'), type:'mirror',
+    x: 0, y: 4, z: 0, yaw: 45, pitch: 0, width: 3.4, height: 3.4, parabolic: false
+  }, overrides);
+}
+
+function initScene(){
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0a0d12);
+  scene.fog = new THREE.Fog(0x0a0d12, 22, 46);
+
+  var vp = document.getElementById('viewport');
+  perspCamera = new THREE.PerspectiveCamera(48, vp.clientWidth/vp.clientHeight, 0.1, 200);
+  var aspect0 = vp.clientWidth/vp.clientHeight;
+  orthoCamera = new THREE.OrthographicCamera(-10*aspect0, 10*aspect0, 10, -10, 0.1, 200);
+  orthoCamera.up.set(0, 0, -1);
+  camera = perspCamera;
+
+  renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias:true, alpha:false });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(vp.clientWidth, vp.clientHeight);
+
+  var amb = new THREE.AmbientLight(0x8899aa, 0.55);
+  scene.add(amb);
+  var dir1 = new THREE.DirectionalLight(0xffffff, 0.9);
+  dir1.position.set(8, 14, 6);
+  scene.add(dir1);
+  var dir2 = new THREE.DirectionalLight(0x6688ff, 0.4);
+  dir2.position.set(-8, 6, -8);
+  scene.add(dir2);
+
+  buildTable();
+  buildBoundsBox();
+
+  clock = new THREE.Clock();
+  window.addEventListener('resize', onResize);
+}
+
+function buildTable(){
+  var grid = new THREE.GridHelper(ROOM.x*2, 24, 0x2a3244, 0x1a2028);
+  grid.position.y = 0.001;
+  grid.name = 'tableGrid';
+  scene.add(grid);
+
+  var floorGeo = new THREE.PlaneGeometry(ROOM.x*2, ROOM.z*2);
+  var floorMat = new THREE.MeshStandardMaterial({ color: 0x0c0f15, roughness: 0.95, metalness: 0.05 });
+  var floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI/2;
+  floor.position.y = 0;
+  scene.add(floor);
+
+  var dotGeo = new THREE.CircleGeometry(0.035, 8);
+  var dotMat = new THREE.MeshBasicMaterial({ color: 0x384156 });
+  var dotGroup = new THREE.Group();
+  for(var i=-8;i<=8;i++){
+    for(var j=-8;j<=8;j++){
+      var d = new THREE.Mesh(dotGeo, dotMat);
+      d.rotation.x = -Math.PI/2;
+      d.position.set(i*1.0, 0.003, j*1.0);
+      dotGroup.add(d);
+    }
+  }
+  scene.add(dotGroup);
+}
+
+var boundsBox;
+function buildBoundsBox(){
+  var geo = new THREE.BoxGeometry(ROOM.x*2, ROOM.yMax-ROOM.yMin, ROOM.z*2);
+  var edges = new THREE.EdgesGeometry(geo);
+  var mat = new THREE.LineBasicMaterial({ color: 0x39e0ff, transparent:true, opacity:0.18 });
+  boundsBox = new THREE.LineSegments(edges, mat);
+  boundsBox.position.set(0, (ROOM.yMax+ROOM.yMin)/2, 0);
+  boundsBox.visible = state.showBounds;
+  scene.add(boundsBox);
+}
+
+function onResize(){
+  var vp = document.getElementById('viewport');
+  var aspect = vp.clientWidth/vp.clientHeight;
+  perspCamera.aspect = aspect;
+  perspCamera.updateProjectionMatrix();
+  var halfH = orthoHalfHeight();
+  orthoCamera.left = -halfH*aspect; orthoCamera.right = halfH*aspect;
+  orthoCamera.top = halfH; orthoCamera.bottom = -halfH;
+  orthoCamera.updateProjectionMatrix();
+  renderer.setSize(vp.clientWidth, vp.clientHeight);
+}
+
+var camTarget = new THREE.Vector3(0, 4, 0);
+var camDist = 22, camAz = 0.9, camPolar = 1.05;
+function orthoHalfHeight(){ return camDist * 0.42; }
+
+function updateCamera(){
+  var x = camTarget.x + camDist * Math.sin(camPolar) * Math.sin(camAz);
+  var y = camTarget.y + camDist * Math.cos(camPolar);
+  var z = camTarget.z + camDist * Math.sin(camPolar) * Math.cos(camAz);
+  perspCamera.position.set(x,y,z);
+  perspCamera.lookAt(camTarget);
+
+  orthoCamera.position.set(camTarget.x, camTarget.y + 40, camTarget.z);
+  orthoCamera.lookAt(camTarget);
+  var vp = document.getElementById('viewport');
+  var aspect = vp.clientWidth/vp.clientHeight;
+  var halfH = orthoHalfHeight();
+  orthoCamera.left = -halfH*aspect; orthoCamera.right = halfH*aspect;
+  orthoCamera.top = halfH; orthoCamera.bottom = -halfH;
+  orthoCamera.updateProjectionMatrix();
+}
+function resetCamera(){
+  camTarget.set(0,4,0); camDist=22; camAz=0.9; camPolar=1.05; updateCamera();
+}
+
+function setMode2D(on){
+  state.mode2D = on;
+  camera = on ? orthoCamera : perspCamera;
+  document.getElementById('toggle2D').classList.toggle('on', on);
+  document.getElementById('hint').textContent = on
+    ? 'drag to pan · scroll to zoom · viewed from directly above'
+    : 'drag to orbit · scroll to zoom · shift+drag to pan';
+  updateCamera();
+}
+
+function setupOrbitControls(){
+  var vp = document.getElementById('viewport');
+  var dragging=false, panning=false, lastX=0, lastY=0;
+  vp.addEventListener('pointerdown', function(e){
+    dragging = true; panning = state.mode2D || e.shiftKey;
+    lastX = e.clientX; lastY = e.clientY;
+    vp.setPointerCapture(e.pointerId);
+  });
+  vp.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    var dx = e.clientX - lastX, dy = e.clientY - lastY;
+    lastX = e.clientX; lastY = e.clientY;
+    if(panning){
+      var panScale = state.mode2D ? (orthoHalfHeight()/300) : 0.02;
+      var right = new THREE.Vector3(Math.cos(camAz),0,-Math.sin(camAz));
+      var fwd = new THREE.Vector3(0,0,1);
+      camTarget.add(right.multiplyScalar(-dx*panScale));
+      if(state.mode2D){
+        camTarget.add(fwd.multiplyScalar(-dy*panScale));
+      } else {
+        var up = new THREE.Vector3(0,1,0);
+        camTarget.add(up.multiplyScalar(dy*panScale));
+      }
+    } else {
+      camAz -= dx*0.006;
+      camPolar -= dy*0.006;
+      camPolar = Math.max(0.15, Math.min(Math.PI-0.15, camPolar));
+    }
+    updateCamera();
+  });
+  window.addEventListener('pointerup', function(){ dragging=false; });
+  vp.addEventListener('wheel', function(e){
+    e.preventDefault();
+    camDist *= (1 + e.deltaY*0.001);
+    camDist = Math.max(4, Math.min(60, camDist));
+    updateCamera();
+  }, { passive:false });
+}
+
+function degToRad(d){ return d*Math.PI/180; }
+
+function getLaserDirection(l){
+  var dir = new THREE.Vector3(0,0,-1);
+  var e = new THREE.Euler(degToRad(l.pitch), degToRad(l.yaw), 0, 'YXZ');
+  dir.applyEuler(e);
+  return dir.normalize();
+}
+function getMirrorNormal(m){
+  var n = new THREE.Vector3(0,0,1);
+  var e = new THREE.Euler(degToRad(m.pitch), degToRad(m.yaw), 0, 'YXZ');
+  n.applyEuler(e);
+  return n.normalize();
+}
+
+function intersectRoomBounds(origin, dir){
+  var tMax = 1e6;
+  function planeT(axisVal, dirVal, bound){
+    if(Math.abs(dirVal) < 1e-8) return Infinity;
+    var t = (bound - axisVal)/dirVal;
+    return t > 1e-4 ? t : Infinity;
+  }
+  var candidates = [
+    planeT(origin.x, dir.x, ROOM.x), planeT(origin.x, dir.x, -ROOM.x),
+    planeT(origin.y, dir.y, ROOM.yMax), planeT(origin.y, dir.y, ROOM.yMin),
+    planeT(origin.z, dir.z, ROOM.z), planeT(origin.z, dir.z, -ROOM.z)
+  ];
+  var t = Math.min.apply(null, candidates);
+  if(!isFinite(t)) t = 30;
+  return origin.clone().add(dir.clone().multiplyScalar(t));
+}
+
+var raycaster = new THREE.Raycaster();
+function traceBeam(l){
+  var origin = new THREE.Vector3(l.x, l.y, l.z);
+  var dir = getLaserDirection(l);
+  var points = [origin.clone()];
+  var bounces = 0;
+  for(var i=0;i<state.maxBounces;i++){
+    raycaster.set(origin.clone().add(dir.clone().multiplyScalar(0.002)), dir);
+    var hits = raycaster.intersectObjects(mirrorMeshes, false);
+    if(hits.length > 0){
+      var hit = hits[0];
+      points.push(hit.point.clone());
+      var normalMatrix = new THREE.Matrix3().getNormalMatrix(hit.object.matrixWorld);
+      var n = hit.face.normal.clone().applyMatrix3(normalMatrix).normalize();
+      var d = dir.clone();
+      var reflected = d.sub(n.clone().multiplyScalar(2*d.dot(n)));
+      dir = reflected.normalize();
+      origin = hit.point.clone();
+      bounces++;
+    } else {
+      points.push(intersectRoomBounds(origin, dir));
+      break;
+    }
+  }
+  return { points: points, bounces: bounces };
+}
+
+function makeCylinderBetween(p0, p1, radius, material){
+  var dir = new THREE.Vector3().subVectors(p1,p0);
+  var len = dir.length();
+  if(len < 1e-5) len = 1e-5;
+  var geo = new THREE.CylinderGeometry(radius, radius, len, 8, 1, true);
+  geo.translate(0, len/2, 0);
+  var mesh = new THREE.Mesh(geo, material);
+  mesh.position.copy(p0);
+  var up = new THREE.Vector3(0,1,0);
+  var ndir = dir.clone().normalize();
+  mesh.quaternion.setFromUnitVectors(up, ndir);
+  return mesh;
+}
+
+function rebuildBeam(l){
+  if(beamGroups[l.id]){
+    scene.remove(beamGroups[l.id]);
+    disposeGroup(beamGroups[l.id]);
+  }
+  var group = new THREE.Group();
+  var trace = traceBeam(l);
+  var pts = trace.points;
+  var color = new THREE.Color(l.color);
+
+  var coreMat = new THREE.MeshBasicMaterial({ color: color, transparent:true, opacity:0.95 });
+  var glowMat = new THREE.MeshBasicMaterial({ color: color, transparent:true, opacity:0.22, blending: THREE.AdditiveBlending, depthWrite:false });
+
+  for(var i=0;i<pts.length-1;i++){
+    group.add(makeCylinderBetween(pts[i], pts[i+1], 0.02, coreMat));
+    group.add(makeCylinderBetween(pts[i], pts[i+1], 0.09, glowMat));
+  }
+
+  var sourceGeo = new THREE.SphereGeometry(0.12, 12, 12);
+  var sourceMat = new THREE.MeshBasicMaterial({ color: color });
+  var sourceMesh = new THREE.Mesh(sourceGeo, sourceMat);
+  sourceMesh.position.copy(pts[0]);
+  group.add(sourceMesh);
+
+  for(var j=1;j<pts.length-1;j++){
+    var hitGeo = new THREE.SphereGeometry(0.06, 10, 10);
+    var hitMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent:true, opacity:0.85 });
+    var hitMesh = new THREE.Mesh(hitGeo, hitMat);
+    hitMesh.position.copy(pts[j]);
+    group.add(hitMesh);
+  }
+
+  var endGeo = new THREE.SphereGeometry(0.14, 12, 12);
+  var endMat = new THREE.MeshBasicMaterial({ color: color, transparent:true, opacity:0.5, blending: THREE.AdditiveBlending, depthWrite:false });
+  var endMesh = new THREE.Mesh(endGeo, endMat);
+  endMesh.position.copy(pts[pts.length-1]);
+  group.add(endMesh);
+
+  scene.add(group);
+  beamGroups[l.id] = group;
+  l._bounces = trace.bounces;
+}
+
+function disposeGroup(group){
+  group.traverse(function(obj){
+    if(obj.geometry) obj.geometry.dispose();
+  });
+}
+
+function buildFlatGeometry(width, height){
+  return new THREE.BoxGeometry(width, height, 0.12);
+}
+function buildParabolicGeometry(width, height){
+  var depth = 0.28 * width;
+  var segs = 24;
+  var geo = new THREE.PlaneGeometry(width, height, segs, 1);
+  var pos = geo.attributes.position;
+  for(var i=0;i<pos.count;i++){
+    var x = pos.getX(i);
+    var u = x/(width/2);
+    pos.setZ(i, depth*(u*u - 1));
+  }
+  geo.computeVertexNormals();
+  return geo;
+}
+
+function applyMirrorShape(mesh, m){
+  if(mesh.geometry) mesh.geometry.dispose();
+  if(Array.isArray(mesh.material)){ mesh.material.forEach(function(mm){ mm.dispose(); }); }
+  else if(mesh.material){ mesh.material.dispose(); }
+
+  if(m.parabolic){
+    mesh.geometry = buildParabolicGeometry(m.width, m.height);
+    mesh.material = new THREE.MeshStandardMaterial({ color: 0xc7d2e0, metalness: 1.0, roughness: 0.08, envMapIntensity: 1.2, side: THREE.DoubleSide });
+  } else {
+    mesh.geometry = buildFlatGeometry(m.width, m.height);
+    var frontMat = new THREE.MeshStandardMaterial({ color: 0xc7d2e0, metalness: 1.0, roughness: 0.08, envMapIntensity: 1.2 });
+    var edgeMat = new THREE.MeshStandardMaterial({ color: 0x2a3140, metalness: 0.3, roughness: 0.6 });
+    mesh.material = [edgeMat, edgeMat, edgeMat, edgeMat, frontMat, frontMat];
+  }
+  mesh.userData.geoW = m.width;
+  mesh.userData.geoH = m.height;
+  mesh.userData.isParabolic = !!m.parabolic;
+}
+
+function buildMirrorMesh(m){
+  var mesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial());
+  mesh.userData.mirror = m;
+  applyMirrorShape(mesh, m);
+  return mesh;
+}
+
+function updateMirrorTransform(mesh, m){
+  mesh.position.set(m.x, m.y, m.z);
+  var e = new THREE.Euler(degToRad(m.pitch), degToRad(m.yaw), 0, 'YXZ');
+  mesh.quaternion.setFromEuler(e);
+  var sizeChanged = mesh.userData.geoW !== m.width || mesh.userData.geoH !== m.height;
+  var typeChanged = mesh.userData.isParabolic !== !!m.parabolic;
+  if(sizeChanged || typeChanged){
+    applyMirrorShape(mesh, m);
+  }
+}
+
+function recomputeAll(){
+  state.lasers.forEach(rebuildBeam);
+  updateReadout();
+}
+
+function updateReadout(){
+  document.getElementById('rLasers').textContent = state.lasers.length;
+  document.getElementById('rMirrors').textContent = state.mirrors.length;
+  var total = state.lasers.reduce(function(s,l){ return s + (l._bounces||0); }, 0);
+  document.getElementById('rBounces').textContent = total;
+}
+
+function addLaser(overrides){
+  var l = defaultLaser(overrides);
+  state.lasers.push(l);
+  renderLaserCard(l);
+  rebuildBeam(l);
+  updateReadout();
+}
+function addMirror(overrides){
+  var m = defaultMirror(overrides);
+  state.mirrors.push(m);
+  var mesh = buildMirrorMesh(m);
+  updateMirrorTransform(mesh, m);
+  scene.add(mesh);
+  mirrorMeshes.push(mesh);
+  mirrorObjs[m.id] = mesh;
+  renderMirrorCard(m);
+  recomputeAll();
+}
+
+function removeLaser(id){
+  state.lasers = state.lasers.filter(function(l){ return l.id !== id; });
+  if(beamGroups[id]){ scene.remove(beamGroups[id]); disposeGroup(beamGroups[id]); delete beamGroups[id]; }
+  var el = document.getElementById('card-'+id);
+  if(el) el.remove();
+  updateReadout();
+}
+function removeMirror(id){
+  state.mirrors = state.mirrors.filter(function(m){ return m.id !== id; });
+  var mesh = mirrorObjs[id];
+  if(mesh){
+    scene.remove(mesh);
+    mesh.geometry.dispose();
+    mirrorMeshes = mirrorMeshes.filter(function(mm){ return mm !== mesh; });
+    delete mirrorObjs[id];
+  }
+  var el = document.getElementById('card-'+id);
+  if(el) el.remove();
+  recomputeAll();
+}
+
+function sliderRow(container, labelText, min, max, step, value, onInput, colorVar){
+  var row = document.createElement('div');
+  row.className = 'row';
+  var label = document.createElement('label');
+  label.textContent = labelText;
+  var input = document.createElement('input');
+  input.type = 'range'; input.min=min; input.max=max; input.step=step; input.value=value;
+  var val = document.createElement('span');
+  val.className = 'val'; val.textContent = value;
+  if(colorVar) input.style.setProperty('--thumb-color', colorVar);
+  input.addEventListener('input', function(){
+    val.textContent = parseFloat(input.value).toFixed(step<1?1:0);
+    onInput(parseFloat(input.value));
+  });
+  row.appendChild(label); row.appendChild(input); row.appendChild(val);
+  container.appendChild(row);
+  return input;
+}
+
+function renderLaserCard(l){
+  var list = document.getElementById('laserList');
+  var card = document.createElement('div');
+  card.className = 'card'; card.id = 'card-'+l.id;
+  card.style.setProperty('--card-accent', l.color);
+
+  var head = document.createElement('div');
+  head.className = 'card-head';
+  var sw = document.createElement('div');
+  sw.className='swatch'; sw.style.background=l.color; sw.style.setProperty('--sw-color', l.color);
+  var chev = document.createElement('span'); chev.className='chev'; chev.textContent='›';
+  var name = document.createElement('div'); name.className='name'; name.textContent = 'laser ' + l.id;
+  var bounces = document.createElement('div'); bounces.className='bounces'; bounces.id='bounces-'+l.id; bounces.textContent='0 bnc';
+  var del = document.createElement('button'); del.className='del'; del.textContent='×';
+  del.addEventListener('click', function(e){ e.stopPropagation(); removeLaser(l.id); });
+  head.appendChild(chev); head.appendChild(sw); head.appendChild(name); head.appendChild(bounces); head.appendChild(del);
+  head.addEventListener('click', function(){ card.classList.toggle('open'); });
+
+  var body = document.createElement('div');
+  body.className = 'card-body';
+
+  sliderRow(body, 'x', -ROOM.x, ROOM.x, 0.1, l.x, function(v){ l.x=v; rebuildBeam(l); updateReadout(); }, l.color);
+  sliderRow(body, 'y', -ROOM.z, ROOM.z, 0.1, l.z, function(v){ l.z=v; rebuildBeam(l); updateReadout(); }, l.color);
+  sliderRow(body, 'z', ROOM.yMin+0.2, ROOM.yMax-0.2, 0.1, l.y, function(v){ l.y=v; rebuildBeam(l); updateReadout(); }, l.color);
+  sliderRow(body, 'yaw', -180, 180, 1, l.yaw, function(v){ l.yaw=v; rebuildBeam(l); updateReadout(); }, l.color);
+  sliderRow(body, 'pitch', -89, 89, 1, l.pitch, function(v){ l.pitch=v; rebuildBeam(l); updateReadout(); }, l.color);
+
+  var colorRow = document.createElement('div');
+  colorRow.className = 'row';
+  var clabel = document.createElement('label'); clabel.textContent = 'hue';
+  var cinput = document.createElement('input'); cinput.type='color'; cinput.value = l.color;
+  cinput.addEventListener('input', function(){
+    l.color = cinput.value;
+    sw.style.background = l.color; sw.style.setProperty('--sw-color', l.color);
+    card.style.setProperty('--card-accent', l.color);
+    rebuildBeam(l);
+  });
+  colorRow.appendChild(clabel); colorRow.appendChild(cinput);
+  body.appendChild(colorRow);
+
+  card.appendChild(head); card.appendChild(body);
+  list.appendChild(card);
+  card.classList.add('open');
+}
+
+function renderMirrorCard(m){
+  var list = document.getElementById('mirrorList');
+  var card = document.createElement('div');
+  card.className = 'card'; card.id = 'card-'+m.id;
+  card.style.setProperty('--card-accent', '#39e0ff');
+
+  var head = document.createElement('div');
+  head.className = 'card-head';
+  var sw = document.createElement('div');
+  sw.className='swatch'; sw.style.background='#c7d2e0'; sw.style.setProperty('--sw-color', '#39e0ff');
+  var chev = document.createElement('span'); chev.className='chev'; chev.textContent='›';
+  var name = document.createElement('div'); name.className='name'; name.textContent = 'mirror ' + m.id;
+  var spacer = document.createElement('div'); spacer.style.flex='1';
+  var del = document.createElement('button'); del.className='del'; del.textContent='×';
+  del.addEventListener('click', function(e){ e.stopPropagation(); removeMirror(m.id); });
+  head.appendChild(chev); head.appendChild(sw); head.appendChild(name); head.appendChild(spacer); head.appendChild(del);
+  head.addEventListener('click', function(){ card.classList.toggle('open'); });
+
+  var body = document.createElement('div');
+  body.className = 'card-body';
+  var mesh = mirrorObjs[m.id];
+
+  function refresh(){ updateMirrorTransform(mesh, m); recomputeAll(); }
+
+  sliderRow(body, 'x', -ROOM.x, ROOM.x, 0.1, m.x, function(v){ m.x=v; refresh(); });
+  sliderRow(body, 'y', -ROOM.z, ROOM.z, 0.1, m.z, function(v){ m.z=v; refresh(); });
+  sliderRow(body, 'z', ROOM.yMin+0.2, ROOM.yMax-0.2, 0.1, m.y, function(v){ m.y=v; refresh(); });
+  sliderRow(body, 'yaw', -180, 180, 1, m.yaw, function(v){ m.yaw=v; refresh(); });
+  sliderRow(body, 'pitch', -89, 89, 1, m.pitch, function(v){ m.pitch=v; refresh(); });
+  sliderRow(body, 'w', 0.5, 8, 0.1, m.width, function(v){ m.width=v; refresh(); });
+  sliderRow(body, 'h', 0.5, 8, 0.1, m.height, function(v){ m.height=v; refresh(); });
+
+  var curveRow = document.createElement('div');
+  curveRow.className = 'row';
+  var curveLabel = document.createElement('label'); curveLabel.textContent = 'curve';
+  var curveCheck = document.createElement('input');
+  curveCheck.type = 'checkbox'; curveCheck.checked = !!m.parabolic;
+  curveCheck.style.cssText = 'width:15px;height:15px;accent-color:#39e0ff;cursor:pointer;';
+  var curveHint = document.createElement('span');
+  curveHint.style.cssText = 'font-family:var(--mono);font-size:10px;color:var(--text-faint);flex:1;';
+  curveHint.textContent = 'parabolic dish';
+  curveCheck.addEventListener('change', function(){
+    m.parabolic = curveCheck.checked;
+    refresh();
+  });
+  curveRow.appendChild(curveLabel); curveRow.appendChild(curveCheck); curveRow.appendChild(curveHint);
+  body.appendChild(curveRow);
+
+  card.appendChild(head); card.appendChild(body);
+  list.appendChild(card);
+}
+
+function tickBounceLabels(){
+  state.lasers.forEach(function(l){
+    var el = document.getElementById('bounces-'+l.id);
+    if(el) el.textContent = (l._bounces||0) + ' bnc';
+  });
+}
+
+function wireGlobalControls(){
+  var mb = document.getElementById('maxBounces');
+  var mbVal = document.getElementById('maxBouncesVal');
+  mb.addEventListener('input', function(){
+    state.maxBounces = parseInt(mb.value);
+    mbVal.textContent = mb.value;
+    recomputeAll();
+  });
+
+  document.getElementById('addLaser').addEventListener('click', function(){
+    var jitter = (state.lasers.length % 4) * 2 - 3;
+    addLaser({ x: -7+jitter, y: 4, z: -7-jitter, color: randomLaserColor() });
+  });
+  document.getElementById('addMirror').addEventListener('click', function(){
+    var jitter = (state.mirrors.length % 4) * 2 - 3;
+    addMirror({ x: jitter, y: 4, z: -jitter });
+  });
+
+  document.getElementById('toggleGrid').addEventListener('click', function(e){
+    state.showGrid = !state.showGrid;
+    e.target.classList.toggle('on', state.showGrid);
+    var grid = scene.getObjectByName('tableGrid');
+    if(grid) grid.visible = state.showGrid;
+  });
+  document.getElementById('toggleGhost').addEventListener('click', function(e){
+    state.showBounds = !state.showBounds;
+    e.target.classList.toggle('on', state.showBounds);
+    boundsBox.visible = state.showBounds;
+  });
+  document.getElementById('resetCam').addEventListener('click', resetCamera);
+  document.getElementById('toggle2D').addEventListener('click', function(){
+    setMode2D(!state.mode2D);
+  });
+}
+
+var laserPalette = ['#ff2d55', '#39ff88', '#39e0ff', '#ffb020', '#c77dff', '#ff6b6b'];
+var paletteIdx = 0;
+function randomLaserColor(){
+  paletteIdx = (paletteIdx+1) % laserPalette.length;
+  return laserPalette[paletteIdx];
+}
+
+function seedScene(){
+  addMirror({ id: uid('M'), x: 2.6, y: 4, z: 2.9, yaw: 135, pitch: 0, width: 3, height: 3 });
+  addMirror({ id: uid('M'), x: 5.0, y: 4, z: 3.5, yaw: 107, pitch: 0, width: 2.1, height: 4 });
+  addLaser({ id: uid('L'), x: 3.3, y: 4, z: -2.9, yaw: 180, pitch: 0, color: '#ff2d55' });
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  tickBounceLabels();
+  renderer.render(scene, camera);
+}
+
+initScene();
+setupOrbitControls();
+wireGlobalControls();
+resetCamera();
+seedScene();
+animate();
+
+})();
+</script>
+</body>
+</html>

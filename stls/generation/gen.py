@@ -25,7 +25,7 @@ from matplotlib.path import Path as MplPath
 import triangle as tr
 
 # ─── EDIT THESE ────────────────────────────────────────────────────────────
-TEXT = "dc motor control"       # the text to convert
+TEXT = "photography"       # the text to convert
 SIZE = 50            # font size (roughly the height in mm)
 DEPTH = 5            # extrusion depth/thickness
 FONT_PATH = None     # optional path to a .ttf/.otf font file, or None for default

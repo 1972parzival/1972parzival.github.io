@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Energy System Builder</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg1: #ffffff;
+  --bg2: #f5f4f0;
+  --text1: #1a1a18;
+  --text2: #5a5955;
+  --text3: #8a8880;
+  --border1: rgba(0,0,0,0.10);
+  --border2: rgba(0,0,0,0.20);
+  --border3: rgba(0,0,0,0.35);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --blue: #378ADD;
+  --blue-dark: #185FA5;
+  --green: #1D9E75;
+  --amber: #BA7517;
+  --red: #E24B4A;
+  --purple: #7F77DD;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg1: #1e1e1c; --bg2: #252523;
+    --text1: #e8e6de; --text2: #9c9a92; --text3: #6a6860;
+    --border1: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.16);
+    --border3: rgba(255,255,255,0.28);
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg2);
+  color: var(--text1);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+header {
+  background: var(--bg1);
+  border-bottom: 0.5px solid var(--border1);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+header h1 {
+  font-size: 15px; font-weight: 500; color: var(--text1);
+  display: flex; align-items: center; gap: 8px;
+}
+header h1 i { color: var(--amber); font-size: 18px; }
+
+.toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-left: auto; }
+
+.btn {
+  font-size: 12px; padding: 6px 12px;
+  border-radius: var(--radius-md); border: 0.5px solid var(--border2);
+  background: var(--bg1); cursor: pointer; color: var(--text1);
+  display: flex; align-items: center; gap: 5px;
+  font-family: inherit; transition: background 0.15s;
+}
+.btn:hover { background: var(--bg2); }
+.btn.primary { border-color: var(--blue); color: var(--blue-dark); }
+.btn.danger  { border-color: var(--red);  color: var(--red); }
+
+.source-row { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); }
+.source-row input[type=number] {
+  width: 72px; font-size: 12px; padding: 5px 8px;
+  border: 0.5px solid var(--border2); border-radius: var(--radius-md);
+  background: var(--bg1); color: var(--text1); font-family: inherit;
+}
+.source-row input[type=number]:focus { outline: none; border-color: var(--blue); }
+
+/* ── Workspace ── */
+#workspace { flex: 1; display: flex; flex-direction: column; padding: 16px; gap: 12px; }
+
+#canvas {
+  flex: 1; position: relative;
+  background: var(--bg1);
+  border: 0.5px solid var(--border1); border-radius: var(--radius-lg);
+  min-height: 600px; overflow: hidden;
+}
+#canvas-svg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 2;
+}
+#temp-wire {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 3;
+}
+
+/* ── Block shell ──
+   The block itself has NO horizontal padding — instead we use a
+   .block-body inner div with generous padding. The port columns
+   sit fully OUTSIDE the block via negative positioning so they
+   never overlap text. The block's visual border and background
+   start where content starts.
+── */
+.block {
+  position: absolute;
+  /* width of inner content + port gutter on each side */
+  /* 300px body + 28px left port zone + 28px right port zone */
+  width: 356px;
+  background: transparent; /* shell is transparent */
+  cursor: grab;
+  user-select: none;
+  z-index: 10;
+  display: flex;
+  align-items: stretch;
+}
+.block.dragging { cursor: grabbing; z-index: 30; }
+
+/* ── Port columns — live in the side gutters, never touch body ── */
+.port-col {
+  width: 28px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 15;
+  padding: 16px 0;
+}
+
+/* ── Body — the visible card ── */
+.block-body {
+  flex: 1;
+  background: var(--bg1);
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  min-width: 0;
+}
+.block:hover .block-body { border-color: var(--border3); box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+.block.dragging .block-body { box-shadow: 0 6px 24px rgba(0,0,0,0.14); }
+
+.block-type {
+  font-size: 9px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text3); margin-bottom: 7px;
+}
+
+.block-header {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 14px;
+}
+
+.block-name {
+  flex: 1; font-size: 14px; font-weight: 500; color: var(--text1);
+  border: none; background: transparent; outline: none;
+  padding: 2px 4px; border-radius: 4px; font-family: inherit; min-width: 0;
+}
+.block-name:focus { background: var(--bg2); }
+
+.icon-btn {
+  background: none; border: none; cursor: pointer; color: var(--text3);
+  font-size: 16px; padding: 3px; border-radius: 4px;
+  display: flex; align-items: center; line-height: 1;
+  transition: color 0.1s; flex-shrink: 0;
+}
+.icon-btn:hover { color: var(--text1); }
+.icon-btn.del:hover { color: var(--red); }
+
+.eff-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.eff-label { font-size: 12px; color: var(--text2); white-space: nowrap; flex-shrink: 0; }
+.eff-row input[type=range] { flex: 1; height: 4px; cursor: pointer; min-width: 0; }
+.eff-val { font-size: 13px; font-weight: 500; min-width: 42px; text-align: right; flex-shrink: 0; }
+
+.io-row {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--text2);
+  padding-top: 10px; border-top: 0.5px solid var(--border1); gap: 8px;
+}
+.io-label { white-space: nowrap; }
+.io-val { font-weight: 600; font-size: 13px; }
+
+.loss-row { text-align: center; font-size: 11px; color: var(--text3); margin-top: 6px; }
+
+/* ── Ports ── */
+.port {
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 2.5px solid var(--bg2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: #fff;
+  flex-shrink: 0;
+  transition: transform 0.12s, box-shadow 0.12s, opacity 0.12s;
+}
+.port:hover { transform: scale(1.3); }
+.port.out-port { background: var(--blue); }
+.port.in-port  { background: var(--green); }
+.port.no-conn  { opacity: 0.38; }
+.port.has-conn { opacity: 1; }
+.port.active-connect {
+  box-shadow: 0 0 0 4px rgba(55,138,221,0.35);
+  transform: scale(1.25);
+}
+
+/* ── Stats ── */
+#stats {
+  background: var(--bg1); border: 0.5px solid var(--border1);
+  border-radius: var(--radius-lg); padding: 14px 16px;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px;
+}
+.stat-card { background: var(--bg2); border-radius: var(--radius-md); padding: 10px 14px; }
+.stat-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
+.stat-val   { font-size: 22px; font-weight: 500; color: var(--text1); }
+.stat-unit  { font-size: 12px; color: var(--text2); margin-left: 3px; }
+
+/* ── Legend ── */
+.legend {
+  display: flex; gap: 16px; font-size: 11px; color: var(--text2);
+  align-items: center; padding: 0 4px; flex-wrap: wrap;
+}
+.leg-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block; margin-right: 4px; vertical-align: middle;
+}
+.hint-text { font-size: 11px; color: var(--text3); margin-left: auto; }
+
+.empty-hint {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center; color: var(--text3); font-size: 13px; pointer-events: none;
+}
+.empty-hint i { font-size: 32px; display: block; margin-bottom: 8px; opacity: 0.35; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><i class="ti ti-bolt" aria-hidden="true"></i> Energy System Builder</h1>
+  <div class="toolbar">
+    <button class="btn primary" onclick="addBlock()">
+      <i class="ti ti-plus" aria-hidden="true"></i> Add component
+    </button>
+    <div class="source-row">
+      <i class="ti ti-sun" aria-hidden="true" style="color:var(--amber)"></i>
+      <label for="source-input">Source:</label>
+      <input type="number" id="source-input" value="100" min="0" step="1" oninput="recalc()">
+      <span>kWh</span>
+    </div>
+    <button class="btn danger" onclick="clearAll()">
+      <i class="ti ti-trash" aria-hidden="true"></i> Clear all
+    </button>
+    <button class="btn" onclick="clearConnections()">
+      <i class="ti ti-line-dashed" aria-hidden="true"></i> Clear wires
+    </button>
+  </div>
+</header>
+
+<div id="workspace">
+  <div class="legend">
+    <span><span class="leg-dot" style="background:var(--green)"></span> Input ports (left) — sums incoming kWh</span>
+    <span><span class="leg-dot" style="background:var(--blue)"></span> Output ports (right) — click to start wiring, then click an input port</span>
+    <span class="hint-text">Drag blocks · Esc cancels wiring</span>
+  </div>
+
+  <div id="canvas">
+    <div class="empty-hint" id="empty-hint">
+      <i class="ti ti-topology-star-3" aria-hidden="true"></i>
+      Add components to build your energy system
+    </div>
+    <svg id="canvas-svg">
+      <defs>
+        <marker id="arr-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+        <marker id="arr-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="var(--text3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+    </svg>
+    <svg id="temp-wire">
+      <defs>
+        <marker id="tw-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+          <path d="M2 2L8 5L2 8" fill="none" stroke="var(--purple)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+      <path id="wire-preview" d="" fill="none" stroke="var(--purple)" stroke-width="1.5"
+            stroke-dasharray="5 4" marker-end="url(#tw-arr)" opacity="0"/>
+    </svg>
+  </div>
+
+  <div id="stats">
+    <div class="stat-card">
+      <div class="stat-label">Source input</div>
+      <div><span class="stat-val" id="s-input">100</span><span class="stat-unit">kWh</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total output</div>
+      <div><span class="stat-val" id="s-output">—</span><span class="stat-unit">kWh</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total losses</div>
+      <div><span class="stat-val" id="s-loss">—</span><span class="stat-unit">kWh</span></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">System efficiency</div>
+      <div><span class="stat-val" id="s-eff">—</span><span class="stat-unit">%</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const NUM_IN  = 3;
+const NUM_OUT = 3;
+const PORT_COL_W = 28; // must match CSS .port-col width
+
+let blocks = [], connections = [];
+let idCounter = 0, connIdCounter = 0;
+let dragging = null, dragOffX = 0, dragOffY = 0;
+let connecting = null; // { blockId, portIdx }
+let mousePos = { x: 0, y: 0 };
+
+const canvas   = document.getElementById('canvas');
+const svgEl    = document.getElementById('canvas-svg');
+const tempWire = document.getElementById('wire-preview');
+
+// ── Add / remove blocks ──────────────────────────────────────────────
+
+function addBlock(name, x, y, eff) {
+  const id = ++idCounter;
+  const r = canvas.getBoundingClientRect();
+  blocks.push({
+    id,
+    name: name || 'Component ' + id,
+    x: x ?? (PORT_COL_W + 20 + Math.random() * Math.max(10, r.width - 420)),
+    y: y ?? (20 + Math.random() * Math.max(10, r.height - 220)),
+    efficiency: eff ?? 85,
+    inputKwh: 0, outputKwh: 0,
+    inPortKwh:  new Array(NUM_IN).fill(0),
+    outPortKwh: new Array(NUM_OUT).fill(0),
+  });
+  renderBlocks();
+  recalc();
+}
+
+function removeBlock(id) {
+  blocks      = blocks.filter(b => b.id !== id);
+  connections = connections.filter(c => c.fromBlockId !== id && c.toBlockId !== id);
+  renderBlocks(); renderConnections(); recalc();
+}
+
+function updateName(id, v) { const b = blocks.find(x=>x.id===id); if(b) b.name=v; }
+function updateEff(id, v)  { const b = blocks.find(x=>x.id===id); if(b){ b.efficiency=parseFloat(v); recalc(); } }
+function clearAll()         { blocks=[]; connections=[]; connecting=null; renderBlocks(); renderConnections(); recalc(); }
+function clearConnections() { connections=[]; connecting=null; renderBlocks(); renderConnections(); recalc(); }
+
+// ── Render blocks ────────────────────────────────────────────────────
+
+function renderBlocks() {
+  document.querySelectorAll('.block').forEach(e => e.remove());
+  document.getElementById('empty-hint').style.display = blocks.length ? 'none' : 'block';
+
+  blocks.forEach(b => {
+    const wrap = document.createElement('div');
+    wrap.className = 'block';
+    wrap.id = 'blk-' + b.id;
+    wrap.style.left = b.x + 'px';
+    wrap.style.top  = b.y + 'px';
+
+    // ── Left port column ──
+    const inCol = document.createElement('div');
+    inCol.className = 'port-col';
+    inCol.id = 'incol-' + b.id;
+    for (let i = 0; i < NUM_IN; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'port in-port no-conn';
+      dot.id = `inp-${b.id}-${i}`;
+      dot.title = `Input ${i+1}`;
+      dot.textContent = i + 1;
+      dot.onclick = () => handlePortClick(b.id, 'in', i);
+      inCol.appendChild(dot);
+    }
+
+    // ── Body card ──
+    const body = document.createElement('div');
+    body.className = 'block-body';
+
+    const effColor = b.efficiency >= 80 ? 'var(--green)'
+                   : b.efficiency >= 50 ? 'var(--amber)' : 'var(--red)';
+
+    body.innerHTML = `
+      <div class="block-type">Component</div>
+      <div class="block-header">
+        <input class="block-name" value="${b.name}"
+          oninput="updateName(${b.id}, this.value)" title="Click to rename">
+        <button class="icon-btn del" onclick="removeBlock(${b.id})" title="Delete">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="eff-row">
+        <span class="eff-label">Efficiency</span>
+        <input type="range" min="1" max="100" value="${b.efficiency}" step="1"
+          oninput="updateEff(${b.id}, this.value);
+                   this.nextElementSibling.textContent = parseFloat(this.value).toFixed(0)+'%'">
+        <span class="eff-val" style="color:${effColor}">${b.efficiency}%</span>
+      </div>
+      <div class="io-row">
+        <span class="io-label">In:&nbsp;<span class="io-val" id="in-${b.id}">—</span></span>
+        <span class="io-label">Out:&nbsp;<span class="io-val" id="out-${b.id}">—</span></span>
+      </div>
+      <div class="loss-row" id="loss-${b.id}"></div>
+    `;
+
+    // ── Right port column ──
+    const outCol = document.createElement('div');
+    outCol.className = 'port-col';
+    outCol.id = 'outcol-' + b.id;
+    for (let i = 0; i < NUM_OUT; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'port out-port no-conn';
+      dot.id = `outp-${b.id}-${i}`;
+      dot.title = `Output ${i+1}`;
+      dot.textContent = i + 1;
+      dot.onclick = () => handlePortClick(b.id, 'out', i);
+      outCol.appendChild(dot);
+    }
+
+    wrap.appendChild(inCol);
+    wrap.appendChild(body);
+    wrap.appendChild(outCol);
+    canvas.appendChild(wrap);
+    makeDraggable(wrap, b);
+  });
+}
+
+// ── Drag ─────────────────────────────────────────────────────────────
+
+function makeDraggable(wrap, b) {
+  wrap.addEventListener('mousedown', e => {
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'BUTTON' ||
+        e.target.classList.contains('port') ||
+        e.target.closest('button') ||
+        e.target.closest('.port')) return;
+    dragging = b;
+    wrap.classList.add('dragging');
+    const r = canvas.getBoundingClientRect();
+    dragOffX = e.clientX - r.left - b.x;
+    dragOffY = e.clientY - r.top  - b.y;
+    e.preventDefault();
+  });
+}
+
+document.addEventListener('mousemove', e => {
+  const r = canvas.getBoundingClientRect();
+  mousePos.x = e.clientX - r.left;
+  mousePos.y = e.clientY - r.top;
+
+  if (dragging) {
+    dragging.x = Math.max(0, Math.min(r.width  - 360, mousePos.x - dragOffX));
+    dragging.y = Math.max(0, Math.min(r.height - 50,  mousePos.y - dragOffY));
+    const el = document.getElementById('blk-' + dragging.id);
+    if (el) { el.style.left = dragging.x + 'px'; el.style.top = dragging.y + 'px'; }
+    renderConnections();
+  }
+  if (connecting) updateTempWire();
+});
+
+document.addEventListener('mouseup', () => {
+  if (dragging) {
+    document.getElementById('blk-' + dragging.id)?.classList.remove('dragging');
+    dragging = null;
+  }
+});
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') cancelConnect(); });
+
+// ── Port connections ──────────────────────────────────────────────────
+
+function handlePortClick(blockId, type, portIdx) {
+  if (type === 'out') {
+    if (connecting?.blockId === blockId && connecting?.portIdx === portIdx) {
+      cancelConnect(); return;
+    }
+    cancelConnect();
+    connecting = { blockId, portIdx };
+    document.getElementById(`outp-${blockId}-${portIdx}`)?.classList.add('active-connect');
+    updateTempWire();
+  } else {
+    if (!connecting) return;
+    if (connecting.blockId === blockId) { cancelConnect(); return; }
+    const dup = connections.find(c =>
+      c.fromBlockId === connecting.blockId && c.fromPortIdx === connecting.portIdx &&
+      c.toBlockId === blockId && c.toPortIdx === portIdx
+    );
+    if (!dup) {
+      connections.push({
+        id: ++connIdCounter,
+        fromBlockId: connecting.blockId, fromPortIdx: connecting.portIdx,
+        toBlockId: blockId, toPortIdx: portIdx
+      });
+      renderConnections(); recalc();
+    }
+    cancelConnect();
+  }
+}
+
+function cancelConnect() {
+  if (!connecting) return;
+  document.getElementById(`outp-${connecting.blockId}-${connecting.portIdx}`)?.classList.remove('active-connect');
+  connecting = null;
+  tempWire.setAttribute('opacity', '0');
+  tempWire.setAttribute('d', '');
+}
+
+function updateTempWire() {
+  if (!connecting) return;
+  const el = document.getElementById(`outp-${connecting.blockId}-${connecting.portIdx}`);
+  if (!el) return;
+  const cr = canvas.getBoundingClientRect();
+  const pr = el.getBoundingClientRect();
+  const x1 = pr.left - cr.left + pr.width  / 2;
+  const y1 = pr.top  - cr.top  + pr.height / 2;
+  const mx = (x1 + mousePos.x) / 2;
+  tempWire.setAttribute('d', `M${x1},${y1} C${mx},${y1} ${mx},${mousePos.y} ${mousePos.x},${mousePos.y}`);
+  tempWire.setAttribute('opacity', '1');
+}
+
+// ── Render wires ──────────────────────────────────────────────────────
+
+function getPortPos(blockId, type, portIdx) {
+  const el = document.getElementById(type==='in' ? `inp-${blockId}-${portIdx}` : `outp-${blockId}-${portIdx}`);
+  if (!el) return null;
+  const cr = canvas.getBoundingClientRect();
+  const pr = el.getBoundingClientRect();
+  return { x: pr.left - cr.left + pr.width/2, y: pr.top - cr.top + pr.height/2 };
+}
+
+function renderConnections() {
+  while (svgEl.children.length > 1) svgEl.removeChild(svgEl.lastChild);
+
+  // Refresh has-conn / no-conn
+  blocks.forEach(b => {
+    for (let i=0; i<NUM_IN; i++) {
+      const el = document.getElementById(`inp-${b.id}-${i}`);
+      if (!el) continue;
+      const has = connections.some(c => c.toBlockId===b.id && c.toPortIdx===i);
+      el.classList.toggle('has-conn', has); el.classList.toggle('no-conn', !has);
+    }
+    for (let i=0; i<NUM_OUT; i++) {
+      const el = document.getElementById(`outp-${b.id}-${i}`);
+      if (!el) continue;
+      const has = connections.some(c => c.fromBlockId===b.id && c.fromPortIdx===i);
+      el.classList.toggle('has-conn', has); el.classList.toggle('no-conn', !has);
+    }
+  });
+
+  connections.forEach(c => {
+    const from = getPortPos(c.fromBlockId, 'out', c.fromPortIdx);
+    const to   = getPortPos(c.toBlockId,   'in',  c.toPortIdx);
+    if (!from || !to) return;
+
+    const fromB   = blocks.find(b => b.id === c.fromBlockId);
+    const kwh     = fromB ? (fromB.outPortKwh[c.fromPortIdx] || 0) : 0;
+    const hasFlow = kwh > 0.001;
+    const stroke  = hasFlow ? 'var(--blue)' : 'var(--text3)';
+    const marker  = hasFlow ? 'url(#arr-blue)' : 'url(#arr-gray)';
+    const mx      = (from.x + to.x) / 2;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d', `M${from.x},${from.y} C${mx},${from.y} ${mx},${to.y} ${to.x},${to.y}`);
+    path.setAttribute('fill','none'); path.setAttribute('stroke', stroke);
+    path.setAttribute('stroke-width','2'); path.setAttribute('stroke-linecap','round');
+    path.setAttribute('marker-end', marker);
+    svgEl.appendChild(path);
+
+    if (hasFlow) {
+      const lx = mx, ly = (from.y + to.y) / 2 - 10;
+      const lbl = kwh.toFixed(1) + ' kWh';
+      const tw  = lbl.length * 6 + 10;
+      const bg = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      bg.setAttribute('x', lx-tw/2); bg.setAttribute('y', ly-12);
+      bg.setAttribute('width', tw); bg.setAttribute('height', 15);
+      bg.setAttribute('rx','4'); bg.setAttribute('fill','var(--bg1)');
+      const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+      txt.setAttribute('x', lx); txt.setAttribute('y', ly);
+      txt.setAttribute('text-anchor','middle'); txt.setAttribute('font-size','10');
+      txt.setAttribute('font-family','-apple-system,sans-serif');
+      txt.setAttribute('font-weight','500'); txt.setAttribute('fill','var(--blue)');
+      txt.textContent = lbl;
+      svgEl.appendChild(bg); svgEl.appendChild(txt);
+    }
+  });
+}
+
+// ── Calculation ───────────────────────────────────────────────────────
+
+function recalc() {
+  const src = parseFloat(document.getElementById('source-input').value) || 0;
+
+  blocks.forEach(b => {
+    b.inputKwh = 0; b.outputKwh = 0;
+    b.inPortKwh  = new Array(NUM_IN).fill(0);
+    b.outPortKwh = new Array(NUM_OUT).fill(0);
+  });
+
+  const hasIncoming = {};
+  connections.forEach(c => { hasIncoming[c.toBlockId] = true; });
+  const roots = blocks.filter(b => !hasIncoming[b.id]);
+  roots.forEach(b => { b.inPortKwh[0] = src; });
+
+  const queue = roots.map(b => b.id);
+  const visited = new Set();
+
+  while (queue.length) {
+    const id = queue.shift();
+    if (visited.has(id)) continue;
+    visited.add(id);
+    const b = blocks.find(x => x.id === id);
+    if (!b) continue;
+
+    b.inputKwh  = b.inPortKwh.reduce((s,v) => s+v, 0);
+    b.outputKwh = b.inputKwh * b.efficiency / 100;
+
+    const outConns  = connections.filter(c => c.fromBlockId === id);
+    const usedPorts = [...new Set(outConns.map(c => c.fromPortIdx))];
+    const perPort   = usedPorts.length ? b.outputKwh / usedPorts.length : 0;
+
+    usedPorts.forEach(pi => { b.outPortKwh[pi] = perPort; });
+    outConns.forEach(c => {
+      const tb = blocks.find(x => x.id === c.toBlockId);
+      if (tb) {
+        tb.inPortKwh[c.toPortIdx] = (tb.inPortKwh[c.toPortIdx]||0) + perPort;
+        if (!visited.has(c.toBlockId)) queue.push(c.toBlockId);
+      }
+    });
+  }
+
+  // Update block UI
+  blocks.forEach(b => {
+    const loss = b.inputKwh - b.outputKwh;
+    const lr   = b.inputKwh > 0 ? loss / b.inputKwh : 0;
+
+    const inEl   = document.getElementById('in-'   + b.id);
+    const outEl  = document.getElementById('out-'  + b.id);
+    const lossEl = document.getElementById('loss-' + b.id);
+
+    if (inEl)  inEl.textContent  = b.inputKwh.toFixed(1)  + ' kWh';
+    if (outEl) {
+      outEl.textContent = b.outputKwh.toFixed(1) + ' kWh';
+      outEl.style.color = lr > 0.3 ? 'var(--red)' : lr > 0.1 ? 'var(--amber)' : 'var(--green)';
+    }
+    if (lossEl) {
+      lossEl.textContent = b.inputKwh > 0 ? 'Loss: ' + loss.toFixed(1) + ' kWh' : '';
+      lossEl.style.color = loss > b.inputKwh*0.3 ? 'var(--red)' : 'var(--text3)';
+    }
+  });
+
+  // Stats bar
+  document.getElementById('s-input').textContent = src.toFixed(1);
+  const terminals = blocks.filter(b => !connections.find(c => c.fromBlockId===b.id));
+  const totalOut  = (terminals.length ? terminals : blocks).reduce((s,b) => s+b.outputKwh, 0);
+  const sysEff    = src > 0 ? totalOut/src*100 : 0;
+  document.getElementById('s-output').textContent = totalOut.toFixed(1);
+  document.getElementById('s-loss').textContent   = Math.max(0, src-totalOut).toFixed(1);
+  document.getElementById('s-eff').textContent    = sysEff.toFixed(1);
+  document.getElementById('s-output').style.color = sysEff>70 ? 'var(--green)' : sysEff>40 ? 'var(--amber)' : 'var(--red)';
+
+  renderConnections();
+}
+
+// ── Seed ─────────────────────────────────────────────────────────────
+
+window.onload = () => {
+  addBlock('Solar Panel',  40,  60, 22);
+  addBlock('Wind Turbine', 40, 280, 40);
+  addBlock('Battery',     430, 160, 92);
+  addBlock('Inverter A',  820,  60, 95);
+  addBlock('Inverter B',  820, 290, 95);
+  setTimeout(() => {
+    connections.push({ id:++connIdCounter, fromBlockId:1, fromPortIdx:0, toBlockId:3, toPortIdx:0 });
+    connections.push({ id:++connIdCounter, fromBlockId:2, fromPortIdx:0, toBlockId:3, toPortIdx:1 });
+    connections.push({ id:++connIdCounter, fromBlockId:3, fromPortIdx:0, toBlockId:4, toPortIdx:0 });
+    connections.push({ id:++connIdCounter, fromBlockId:3, fromPortIdx:1, toBlockId:5, toPortIdx:0 });
+    renderConnections(); recalc();
+  }, 80);
+};
+</script>
+</body>
+</html>

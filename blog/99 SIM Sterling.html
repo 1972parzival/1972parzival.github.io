@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stirling Engine Power Simulation</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f4f4f0;
+  color: #1c1c1a;
+  padding: 1.5rem;
+  max-width: 880px;
+  margin: 0 auto;
+}
+h1 { font-size: 1.15rem; font-weight: 600; margin-bottom: 1.2rem; }
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
+  gap: 9px;
+  margin-bottom: 1.4rem;
+}
+.stat {
+  background: #e8e8e3;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.stat.highlight { background: #ddeef9; }
+.stat.warn      { background: #fce8dc; }
+.stat-label { font-size: 11px; color: #666; margin-bottom: 4px; }
+.stat-value { font-size: 19px; font-weight: 600; color: #1c1c1a; }
+.stat-unit  { font-size: 11px; font-weight: 400; color: #999; margin-left: 2px; }
+.section-head {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin: 1.2rem 0 0.5rem;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+.row label {
+  font-size: 13px;
+  color: #444;
+  min-width: 162px;
+  flex-shrink: 0;
+}
+.row input[type="range"] {
+  flex: 1;
+  accent-color: #2d7dd2;
+  cursor: pointer;
+}
+.row .readout {
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 60px;
+  text-align: right;
+  color: #1c1c1a;
+}
+.hint {
+  font-size: 12px;
+  color: #aaa;
+  margin-left: 172px;
+  margin-bottom: 0.4rem;
+}
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+}
+button {
+  font-size: 13px;
+  padding: 6px 18px;
+  cursor: pointer;
+  border: 1px solid #bbb;
+  border-radius: 7px;
+  background: #fff;
+  color: #333;
+}
+button:hover { background: #ececec; }
+.chart-block { margin-top: 1.4rem; }
+.chart-wrap  { position: relative; width: 100%; }
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 7px;
+  font-size: 12px;
+  color: #666;
+}
+.legend span { display: flex; align-items: center; gap: 6px; }
+.swatch { width: 22px; height: 3px; border-radius: 2px; display: inline-block; }
+.swatch-dashed {
+  width: 22px;
+  height: 0;
+  border-top: 2px dashed #888;
+  display: inline-block;
+  vertical-align: middle;
+}
+</style>
+</head>
+<body>
+
+<h1>Stirling engine — power, heat &amp; temperature simulation</h1>
+
+<div class="stat-grid">
+  <div class="stat highlight"><div class="stat-label">Output power</div>
+    <div class="stat-value" id="sv-power">—<span class="stat-unit">W</span></div></div>
+  <div class="stat highlight"><div class="stat-label">Overall efficiency</div>
+    <div class="stat-value" id="sv-overall">—<span class="stat-unit">%</span></div></div>
+  <div class="stat warn"><div class="stat-label">Heat input required</div>
+    <div class="stat-value" id="sv-qin">—<span class="stat-unit">W</span></div></div>
+  <div class="stat warn"><div class="stat-label">Insulation losses</div>
+    <div class="stat-value" id="sv-qloss">—<span class="stat-unit">W</span></div></div>
+  <div class="stat"><div class="stat-label">Hot side</div>
+    <div class="stat-value" id="sv-hot">—<span class="stat-unit">°C</span></div></div>
+  <div class="stat"><div class="stat-label">Cold side</div>
+    <div class="stat-value" id="sv-cold">—<span class="stat-unit">°C</span></div></div>
+  <div class="stat"><div class="stat-label">Ambient</div>
+    <div class="stat-value" id="sv-amb">—<span class="stat-unit">°C</span></div></div>
+  <div class="stat"><div class="stat-label">Carnot η</div>
+    <div class="stat-value" id="sv-eta">—<span class="stat-unit">%</span></div></div>
+  <div class="stat"><div class="stat-label">Actual η</div>
+    <div class="stat-value" id="sv-real">—<span class="stat-unit">%</span></div></div>
+  <div class="stat"><div class="stat-label">Elapsed</div>
+    <div class="stat-value" id="sv-time">0<span class="stat-unit">min</span></div></div>
+</div>
+
+<div class="section-head">Engine</div>
+<div class="row">
+  <label for="r-flame">Flame temp (°C)</label>
+  <input type="range" id="r-flame" min="300" max="1200" value="700" step="10">
+  <span class="readout" id="d-flame">700 °C</span>
+</div>
+<div class="row">
+  <label for="r-disp">Displacement (cm³)</label>
+  <input type="range" id="r-disp" min="10" max="500" value="80" step="5">
+  <span class="readout" id="d-disp">80 cm³</span>
+</div>
+<div class="row">
+  <label for="r-rpm">Engine speed (RPM)</label>
+  <input type="range" id="r-rpm" min="100" max="1500" value="600" step="50">
+  <span class="readout" id="d-rpm">600 RPM</span>
+</div>
+<div class="row">
+  <label for="r-eff">Mech. efficiency</label>
+  <input type="range" id="r-eff" min="20" max="75" value="45" step="1">
+  <span class="readout" id="d-eff">45 %</span>
+</div>
+<div class="row">
+  <label for="r-water">Water mass (kg)</label>
+  <input type="range" id="r-water" min="1" max="50" value="10" step="1">
+  <span class="readout" id="d-water">10 kg</span>
+</div>
+
+<div class="section-head">Environment</div>
+<div class="row">
+  <label for="r-amb">Ambient temp (°C)</label>
+  <input type="range" id="r-amb" min="-20" max="50" value="18" step="1">
+  <span class="readout" id="d-amb">18 °C</span>
+</div>
+<div class="row">
+  <label for="r-ins">Insulation quality</label>
+  <input type="range" id="r-ins" min="1" max="10" value="7" step="1">
+  <span class="readout" id="d-ins">7 / 10</span>
+</div>
+<div class="hint">Low = leaky. Insulation losses apply equally to heat input calculation.</div>
+
+<div class="toolbar">
+  <button id="btn-reset">↺ Reset</button>
+  <span style="font-size:12px;color:#aaa;">1 s real-time = 1 min engine time</span>
+</div>
+
+<!-- Chart 1: power output -->
+<div class="chart-block">
+  <div class="chart-wrap" style="height: 230px;">
+    <canvas id="chart-power"></canvas>
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="background:#2d7dd2;"></span>Output power (W)</span>
+  </div>
+</div>
+
+<!-- Chart 2: heat budget -->
+<div class="chart-block">
+  <div class="chart-wrap" style="height: 230px;">
+    <canvas id="chart-heat"></canvas>
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="background:#d85a30;"></span>Heat input required (W)</span>
+    <span><span class="swatch" style="background:#2d7dd2;"></span>Useful work out (W)</span>
+    <span><span class="swatch" style="background:#ba7517;"></span>Insulation losses (W)</span>
+    <span><span class="swatch" style="background:#888;"></span>Heat rejected to cold side (W)</span>
+  </div>
+</div>
+
+<!-- Chart 3: temperatures -->
+<div class="chart-block">
+  <div class="chart-wrap" style="height: 200px;">
+    <canvas id="chart-temp"></canvas>
+  </div>
+  <div class="legend">
+    <span><span class="swatch" style="background:#d85a30;"></span>Hot side (°C)</span>
+    <span><span class="swatch" style="background:#1d9e75;"></span>Cold side (°C)</span>
+    <span><span class="swatch-dashed"></span>Ambient (°C)</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var MAX_POINTS = 120;
+  var timeMin    = 0;
+  var simTimer   = null;
+  var coldTemp   = 1.0;
+  var hotTemp    = 700;
+
+  function val(id) { return parseFloat(document.getElementById(id).value); }
+  function el(id)  { return document.getElementById(id); }
+
+  function getParams() {
+    return {
+      flame : val('r-flame'),
+      disp  : val('r-disp'),
+      rpm   : val('r-rpm'),
+      eff   : val('r-eff') / 100,
+      water : val('r-water'),
+      amb   : val('r-amb'),
+      ins   : val('r-ins'),
+    };
+  }
+
+  // Insulation conductance coefficient — shared by heat-in calc and temp drift
+  function leakCoeff(ins) {
+    return (11 - ins) / 10;
+  }
+
+  // Reference thermal conductance (W/°C) at leak=1 for hot and cold sides.
+  // These are tuned so a well-insulated (ins=9) small engine loses ~5-15 W
+  // and a poorly insulated (ins=2) one loses several hundred watts.
+  var G_HOT  = 0.8;   // W per °C per unit leak
+  var G_COLD = 1.5;   // W per °C per unit leak (cold side typically more exposed)
+
+  function calcInsulationLosses(p, hotC, coldC) {
+    var leak = leakCoeff(p.ins);
+    var lossHot  = leak * G_HOT  * Math.abs(hotC  - p.amb);  // W leaving hot side
+    var lossCold = leak * G_COLD * Math.abs(coldC - p.amb);  // W leaking into/out of cold side
+    return { lossHot: lossHot, lossCold: lossCold, total: lossHot + lossCold };
+  }
+
+  function calcEngine(p, hotC, coldC) {
+    var Th = hotC + 273.15;
+    var Tc = coldC + 273.15;
+    if (Tc >= Th) return { power: 0, qIn: 0, qRej: 0, etaC: 0, etaR: 0 };
+    var etaC = 1 - Tc / Th;
+    var etaR = etaC * p.eff;
+    var Vd   = p.disp * 1e-6;
+    var Pm   = 8e5;
+    var n    = p.rpm / 60.0;
+    var power = Math.max(0, etaC * Pm * Vd * n * p.eff);
+
+    // Heat absorbed from hot side per second to produce this work:
+    // Q_in = W_out / eta_real  (first law: Q_in = W + Q_rejected)
+    var qIn  = (etaR > 0) ? power / etaR : 0;
+    var qRej = qIn - power;  // heat dumped to cold side
+
+    return { power: power, qIn: qIn, qRej: qRej, etaC: etaC * 100, etaR: etaR * 100 };
+  }
+
+  // --- chart setup helper ---
+  var gridColor = 'rgba(0,0,0,0.08)';
+
+  function makeTicks(extra) {
+    return Object.assign({ color: '#888', font: { size: 11 } }, extra || {});
+  }
+
+  function baseOptions(yCallback) {
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: {
+          ticks: makeTicks({ maxTicksLimit: 10 }),
+          grid: { color: gridColor }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: makeTicks({ callback: yCallback }),
+          grid: { color: gridColor }
+        }
+      }
+    };
+  }
+
+  var pChart = new Chart(el('chart-power'), {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Output power (W)',
+        data: [],
+        borderColor: '#2d7dd2',
+        backgroundColor: 'rgba(45,125,210,0.10)',
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.35,
+        fill: true
+      }]
+    },
+    options: baseOptions(function (v) { return v.toFixed(1) + ' W'; })
+  });
+
+  var hChart = new Chart(el('chart-heat'), {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [
+        {
+          label: 'Heat input (W)',
+          data: [],
+          borderColor: '#d85a30',
+          backgroundColor: 'rgba(216,90,48,0.07)',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'Work out (W)',
+          data: [],
+          borderColor: '#2d7dd2',
+          backgroundColor: 'rgba(45,125,210,0.07)',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'Insulation losses (W)',
+          data: [],
+          borderColor: '#ba7517',
+          borderWidth: 2,
+          borderDash: [4, 3],
+          pointRadius: 0,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'Heat rejected to cold (W)',
+          data: [],
+          borderColor: '#888',
+          borderWidth: 1.5,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          tension: 0.35,
+          fill: false
+        }
+      ]
+    },
+    options: baseOptions(function (v) { return v.toFixed(1) + ' W'; })
+  });
+
+  var tChart = new Chart(el('chart-temp'), {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [
+        {
+          label: 'Hot (°C)',
+          data: [],
+          borderColor: '#d85a30',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'Cold (°C)',
+          data: [],
+          borderColor: '#1d9e75',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'Ambient (°C)',
+          data: [],
+          borderColor: '#888',
+          borderWidth: 1.5,
+          borderDash: [5, 4],
+          pointRadius: 0,
+          tension: 0,
+          fill: false
+        }
+      ]
+    },
+    options: (function () {
+      var o = baseOptions(function (v) { return v.toFixed(0) + '°C'; });
+      o.scales.y.beginAtZero = false;
+      return o;
+    }())
+  });
+
+  // --- push a row into all three charts simultaneously ---
+  function pushAll(label, pw, qIn, qIns, qRej, hotC, coldC, ambC) {
+    function pushChart(ch, vals) {
+      if (ch.data.labels.length >= MAX_POINTS) {
+        ch.data.labels.shift();
+        ch.data.datasets.forEach(function (ds) { ds.data.shift(); });
+      }
+      ch.data.labels.push(label);
+      vals.forEach(function (v, i) { ch.data.datasets[i].data.push(v); });
+      ch.update('none');
+    }
+    pushChart(pChart, [pw]);
+    pushChart(hChart, [qIn, pw, qIns, qRej]);
+    pushChart(tChart, [hotC, coldC, ambC]);
+  }
+
+  // --- simulation tick ---
+  function tick() {
+    var p    = getParams();
+    var leak = leakCoeff(p.ins);
+
+    // --- hot side temperature ---
+    // Flame supplies heat; insulation leaks it to ambient.
+    // We let hotTemp lag slightly toward flame set-point each tick.
+    hotTemp += (p.flame - hotTemp) * 0.15;
+    // Ambient leak on hot side (Newton's law of cooling, discrete)
+    hotTemp += (p.amb - hotTemp) * leak * 0.003;
+
+    // --- engine thermodynamics ---
+    var r = calcEngine(p, hotTemp, coldTemp);
+
+    // --- insulation losses (in watts, instantaneous) ---
+    var ins = calcInsulationLosses(p, hotTemp, coldTemp);
+
+    // Total heat the flame must supply each second:
+    // = thermodynamic heat absorbed by cycle  +  hot-side insulation loss
+    // (cold-side insulation loss is a separate path; flame doesn't supply it)
+    var totalQin = r.qIn + ins.lossHot;
+
+    // --- cold side temperature ---
+    if (r.etaR > 0) {
+      // Heat rejected to cold reservoir each simulated minute
+      var qRejPerMin = r.qRej * 60;
+      coldTemp += qRejPerMin / (p.water * 4186);
+    }
+    // Ambient leak on cold side
+    coldTemp += (p.amb - coldTemp) * leak * 0.008;
+    coldTemp = Math.min(coldTemp, hotTemp - 0.5);
+
+    timeMin += 1;
+
+    pushAll(
+      timeMin + ' min',
+      parseFloat(r.power.toFixed(2)),
+      parseFloat(totalQin.toFixed(2)),
+      parseFloat(ins.total.toFixed(2)),
+      parseFloat(r.qRej.toFixed(2)),
+      parseFloat(hotTemp.toFixed(2)),
+      parseFloat(coldTemp.toFixed(2)),
+      parseFloat(p.amb.toFixed(1))
+    );
+
+    var overallEff = (totalQin > 0) ? (r.power / totalQin) * 100 : 0;
+
+    function su(v, u) { return v + '<span class="stat-unit">' + u + '</span>'; }
+    el('sv-power').innerHTML   = su(r.power.toFixed(1), 'W');
+    el('sv-overall').innerHTML = su(overallEff.toFixed(1), '%');
+    el('sv-qin').innerHTML     = su(totalQin.toFixed(1), 'W');
+    el('sv-qloss').innerHTML = su(ins.total.toFixed(1), 'W');
+    el('sv-hot').innerHTML   = su(hotTemp.toFixed(1), '°C');
+    el('sv-cold').innerHTML  = su(coldTemp.toFixed(2), '°C');
+    el('sv-amb').innerHTML   = su(p.amb.toFixed(0), '°C');
+    el('sv-eta').innerHTML   = su(r.etaC.toFixed(1), '%');
+    el('sv-real').innerHTML  = su(r.etaR.toFixed(1), '%');
+    el('sv-time').innerHTML  = su(timeMin, 'min');
+  }
+
+  // --- slider labels ---
+  function updateLabels() {
+    var p = getParams();
+    el('d-flame').textContent = p.flame + ' °C';
+    el('d-disp').textContent  = p.disp  + ' cm³';
+    el('d-rpm').textContent   = p.rpm   + ' RPM';
+    el('d-eff').textContent   = Math.round(p.eff * 100) + ' %';
+    el('d-water').textContent = p.water + ' kg';
+    el('d-amb').textContent   = p.amb   + ' °C';
+    el('d-ins').textContent   = p.ins   + ' / 10';
+  }
+
+  // --- reset ---
+  function reset() {
+    clearInterval(simTimer);
+    var p = getParams();
+    coldTemp = 1.0;
+    hotTemp  = p.flame;
+    timeMin  = 0;
+
+    [pChart, hChart, tChart].forEach(function (ch) {
+      ch.data.labels = [];
+      ch.data.datasets.forEach(function (ds) { ds.data = []; });
+      ch.update();
+    });
+
+    ['sv-power','sv-overall','sv-qin','sv-qloss','sv-hot','sv-cold','sv-eta','sv-real'].forEach(function (id) {
+      el(id).innerHTML = '—';
+    });
+    el('sv-amb').innerHTML  = p.amb + '<span class="stat-unit">°C</span>';
+    el('sv-time').innerHTML = '0<span class="stat-unit">min</span>';
+
+    simTimer = setInterval(tick, 1000);
+  }
+
+  ['r-flame','r-disp','r-rpm','r-eff','r-water','r-amb','r-ins'].forEach(function (id) {
+    el(id).addEventListener('input', updateLabels);
+  });
+  el('btn-reset').addEventListener('click', reset);
+
+  updateLabels();
+  reset();
+
+}());
+</script>
+</body>
+</html>

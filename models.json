@@ -6,7 +6,7 @@
     },
     {
         "name": "0 childhood work",
-        "file": "logo.obj",
+        "file": "childhood_work.obj",
         "site": "./blog/0 childhood work.html"
     },
     {
@@ -16,27 +16,27 @@
     },
     {
         "name": "0 home reno",
-        "file": "logo.obj",
+        "file": "home_reno.obj",
         "site": "./blog/0 Home reno.html"
     },
     {
         "name": "0 notes",
-        "file": "logo.obj",
+        "file": "notes.obj",
         "site": "./blog/0 notes.html"
     },
     {
         "name": "0 papers",
-        "file": "logo.obj",
+        "file": "papers.obj",
         "site": "./blog/0 papers.html"
     },
     {
         "name": "0 photography",
-        "file": "logo.obj",
+        "file": "photography.obj",
         "site": "./blog/0 photography.html"
     },
     {
         "name": "1 dc motor control",
-        "file": "dc_motor_control.obj",
+        "file": "logo.obj",
         "site": "./blog/1 DC motor control.html"
     },
     {
