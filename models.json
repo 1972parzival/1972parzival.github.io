@@ -10,11 +10,6 @@
         "site": "./blog/0 childhood work.html"
     },
     {
-        "name": "0 directory",
-        "file": "logo.obj",
-        "site": "./blog/0 directory.html"
-    },
-    {
         "name": "0 home reno",
         "file": "home_reno.obj",
         "site": "./blog/0 Home reno.html"
@@ -285,18 +280,38 @@
         "site": "./blog/50 Hydroxic C02 capture.html"
     },
     {
-        "name": "51 sim energy flow",
+        "name": "99 directory",
         "file": "logo.obj",
-        "site": "./blog/51 SIM energy flow.html"
+        "site": "./blog/99 directory.html"
     },
     {
-        "name": "52 sim sterling",
+        "name": "99 sim energy flow",
         "file": "logo.obj",
-        "site": "./blog/52 SIM Sterling.html"
+        "site": "./blog/99 SIM energy flow.html"
     },
     {
-        "name": "53 sim engine compare",
+        "name": "99 sim engine compare",
         "file": "logo.obj",
-        "site": "./blog/53 SIM engine compare.html"
+        "site": "./blog/99 SIM engine compare.html"
+    },
+    {
+        "name": "99 sim pdf Read",
+        "file": "logo.obj",
+        "site": "./blog/99 SIM pdf_read.html"
+    },
+    {
+        "name": "99 sim sterling",
+        "file": "logo.obj",
+        "site": "./blog/99 SIM Sterling.html"
+    },
+    {
+        "name": "99 sim lazers",
+        "file": "logo.obj",
+        "site": "./blog/99 SIM lazers.html"
+    },
+    {
+        "name": "51 methane digestor",
+        "file": "logo.obj",
+        "site": "./blog/51 Methane digestor.html"
     }
 ]
