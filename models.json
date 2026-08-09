@@ -280,6 +280,16 @@
         "site": "./blog/50 Hydroxic C02 capture.html"
     },
     {
+        "name": "51 methane digestor",
+        "file": "logo.obj",
+        "site": "./blog/51 Methane digestor.html"
+    },
+    {
+        "name": "52 rocker rover",
+        "file": "logo.obj",
+        "site": "./blog/52 Rocker rover.html"
+    },
+    {
         "name": "99 directory",
         "file": "logo.obj",
         "site": "./blog/99 directory.html"
@@ -308,10 +318,5 @@
         "name": "99 sim lazers",
         "file": "logo.obj",
         "site": "./blog/99 SIM lazers.html"
-    },
-    {
-        "name": "51 methane digestor",
-        "file": "logo.obj",
-        "site": "./blog/51 Methane digestor.html"
     }
 ]
