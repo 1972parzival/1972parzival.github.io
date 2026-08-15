@@ -295,9 +295,9 @@
         "site": "./blog/53 phase change materials.html"
     },
     {
-        "name": "99 directory",
+        "name": "54 bubble pump turbine",
         "file": "logo.obj",
-        "site": "./blog/99 directory.html"
+        "site": "./blog/54 bubble pump turbine.html"
     },
     {
         "name": "99 sim energy flow",
@@ -323,6 +323,10 @@
         "name": "99 sim lazers",
         "file": "logo.obj",
         "site": "./blog/99 SIM lazers.html"
+    },
+    {
+        "name": "0 directory",
+        "file": "logo.obj",
+        "site": "./blog/0 directory.html"
     }
-    
 ]
